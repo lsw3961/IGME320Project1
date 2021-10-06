@@ -12,9 +12,10 @@ public class Destructable : MonoBehaviour
             if (collision.gameObject.tag == collisionNames[i])
             {
                 //play destrction animation
-
+                Debug.Log("Hit");
                 //destroy the object
-                Destroy(this);
+                Destroy(this.gameObject);
+                return;
             }
         }
 
