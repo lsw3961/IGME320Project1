@@ -21,11 +21,28 @@ public class Player : MonoBehaviour
     public float maxSpeed = 0.01f;
     public float turnSpeed = 0.5f;
     private float trueTurnSpeed = 0f;
-
+    [SerializeField] private float projectileSpeed = 5f;
+    [SerializeField] string projectileName;
     // declaring variable 
+
+    private void Start()
+    {
+    }
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+            GameObject temp = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
+            if (temp != null)
+            {
+                temp.transform.position = this.gameObject.transform.position;
+                //temp.transform.rotation = this.gameObject.transform.rotation;
+                temp.GetComponent<Bullet>().SetDirection(direction,projectileSpeed);
+                temp = null;
+                Debug.Log(temp.name);
+            }
+        }
         // check if user is pressing left or right or nothing then applies appropriate turn speed
         if (Input.GetKey("left"))
         {

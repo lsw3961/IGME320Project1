@@ -51,7 +51,6 @@ public class ObjectPooler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     //PURPOSE: Retrieve a game object from the object pool

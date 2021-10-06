@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.tag == "Projectile")
         {
             //Destroy the bullet and the enemy
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             Destroy(this.gameObject);
         }
     }
