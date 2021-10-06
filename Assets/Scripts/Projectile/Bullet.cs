@@ -6,16 +6,50 @@ public class Bullet : MonoBehaviour
 {
     Vector2 direction = Vector2.zero;
     private float projectileSpeed = 0.0f;
+
+    //out of bounds vars
+    private Camera mainCamera;
+    private float screenHeight;
+    private float screenWidth;
+    private float xOffset;
+    private float yOffset;
+
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+        screenHeight = mainCamera.orthographicSize;
+        screenWidth = screenHeight * mainCamera.aspect;
+        xOffset = transform.lossyScale.x;
+        yOffset = transform.lossyScale.y;
+    }
+
     private void OnEnable()
     {
-            this.gameObject.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+        //only set velocity when bullet is enabled
+        gameObject.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+    }
+
+    
+    void Update()
+    {
+        OutOfBounds();
     }
 
     public void SetDirection(Vector2 dir, float speed) 
     {
         direction = dir;
         projectileSpeed = speed;
-        this.gameObject.SetActive(true);
+        gameObject.SetActive(true);
 
+    }
+
+    private void OutOfBounds()
+    {
+        //make bullets disappear once they leave the screen
+        if (transform.position.x > screenWidth + xOffset || transform.position.x < -screenWidth - xOffset
+            || transform.position.y > screenHeight + yOffset || transform.position.y < -screenHeight - yOffset)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

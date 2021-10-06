@@ -11,6 +11,9 @@ public class Destructable : MonoBehaviour
         {
             if (collision.gameObject.tag == collisionNames[i])
             {
+                if (collision.gameObject.tag == "Projectile")
+                    collision.gameObject.SetActive(false);
+
                 //play destrction animation
                 Debug.Log("Hit");
                 //destroy the object

@@ -13,8 +13,9 @@ public class ObjectPoolItem
 {
     public int poolAmount;                      //How many items should be in the pool?
     public GameObject objectToPool;             //What is being pooled?
-    public bool expandable = true;            //Can this pool exceed the poolAmount?
-    public GameObject parentObject;             //Parent container (hierarchy organization)
+    public bool expandable = true;              //Can this pool exceed the poolAmount?
+    [HideInInspector]
+    public GameObject objectContainer;          //Parent container (hierarchy organization)
 }
 public class ObjectPooler : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class ObjectPooler : MonoBehaviour
     private void Awake()
     {
         SharedInstance = this;
+        
     }
 
     // Start is called before the first frame update
@@ -34,23 +36,17 @@ public class ObjectPooler : MonoBehaviour
         pooledObjects = new List<GameObject>();
         foreach (ObjectPoolItem item in objectsToPool)
         {
+            //make empty object that becomes the object container (hierarchy management)
+            item.objectContainer = new GameObject(item.objectToPool.tag);
+            item.objectContainer.transform.parent = transform;
+
             for (int i = 0; i < item.poolAmount; i++)
             {
-                GameObject obj;
-
-                //Child to parent if a parent object is given
-                if (item.parentObject != null) { obj = Instantiate(item.objectToPool, item.parentObject.transform); }
-                else { obj = Instantiate(item.objectToPool); }
-
+                GameObject obj = Instantiate(item.objectToPool, item.objectContainer.transform);
                 obj.SetActive(false);
                 pooledObjects.Add(obj);
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     //PURPOSE: Retrieve a game object from the object pool
@@ -70,12 +66,7 @@ public class ObjectPooler : MonoBehaviour
             {
                 if (item.expandable)
                 {
-                    GameObject obj;
-
-                    //Child to parent if a parent object is given
-                    if (item.parentObject != null) { obj = Instantiate(item.objectToPool, item.parentObject.transform); }
-                    else { obj = Instantiate(item.objectToPool); }
-
+                    GameObject obj = Instantiate(item.objectToPool, item.objectContainer.transform);
                     obj.SetActive(false);
                     pooledObjects.Add(obj);
                     return obj;
