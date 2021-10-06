@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     [SerializeField] string projectileName;
     // declaring variable 
 
+    private Vector2 lookOffset = new Vector2(0, 1);
+
     private void Start()
     {
     }
@@ -39,8 +41,6 @@ public class Player : MonoBehaviour
                 temp.transform.position = this.gameObject.transform.position;
                 //temp.transform.rotation = this.gameObject.transform.rotation;
                 temp.GetComponent<Bullet>().SetDirection(direction,projectileSpeed);
-                temp = null;
-                Debug.Log(temp.name);
             }
         }
         // check if user is pressing left or right or nothing then applies appropriate turn speed
@@ -57,28 +57,8 @@ public class Player : MonoBehaviour
             trueTurnSpeed = 0;
         }
 
-        // rotate the direction vector by turn speed degrees each frame
-        direction = Quaternion.Euler(0, 0, trueTurnSpeed) * direction;
-
-        // if user is pressing the up key or "accelerating"
-        if (Input.GetKey("up"))
-        {
-            // calculate the acceleration vector 
-            acceleration = direction * accelerationRate;
-            // Velocity is direction * speed
-            velocity += acceleration;
-        }
-        else if (Input.GetKey("down"))
-        {
-            // calculate the acceleration vector 
-            acceleration = -1 * direction * accelerationRate;
-            // Velocity is direction * speed
-            velocity += acceleration;
-        }
-        else // decelerating
-        {
-            velocity *= decelerationRate;
-        }
+        LookAtMouse();
+        PushPlayer();
 
         // Limit our velocity so that the player doesn't go too fast
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
@@ -90,5 +70,39 @@ public class Player : MonoBehaviour
 
         // set the player's rotation to match the direction
         transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+    }
+
+    //Points the player sprite directly towards the mouse
+    private void LookAtMouse()
+    {
+        lookOffset = new Vector2(
+            Camera.main.ScreenToWorldPoint(Input.mousePosition).x - playerPosition.x,
+            Camera.main.ScreenToWorldPoint(Input.mousePosition).y - playerPosition.y);
+        //direction = Mathf.Atan2(lookOffset.y, lookOffset.x);
+        direction = lookOffset.normalized;
+    }
+
+    //Uses WASD to accelerate the player. Handles deceleration
+    private void PushPlayer()
+    {
+        //Clear acceleration
+        acceleration = Vector3.zero;
+
+        //Add acceleration for each direction key pressed
+        if (Input.GetKey(KeyCode.W))
+            acceleration.y += accelerationRate;
+        if (Input.GetKey(KeyCode.A))
+            acceleration.x -= accelerationRate;
+        if (Input.GetKey(KeyCode.S))
+            acceleration.y -= accelerationRate;
+        if (Input.GetKey(KeyCode.D))
+            acceleration.x += accelerationRate;
+
+        //Cap acceleration
+        acceleration = Vector3.ClampMagnitude(acceleration, accelerationRate);
+        if (Mathf.Abs(acceleration.x) + Mathf.Abs(acceleration.y) == 0)
+            velocity *= decelerationRate;
+        //Add acceleration to velocity
+        velocity += acceleration;
     }
 }
