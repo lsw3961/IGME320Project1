@@ -253,12 +253,20 @@ PrefabInstance:
       value: testplayer
       objectReference: {fileID: 0}
     - target: {fileID: 7863304097828350233, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: maxSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863304097828350233, guid: f08922648400b314cb38afc817cf34b4, type: 3}
       propertyPath: projectileName
       value: Projectile
       objectReference: {fileID: 0}
     - target: {fileID: 7863304097828350233, guid: f08922648400b314cb38afc817cf34b4, type: 3}
       propertyPath: projectileSpeed
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863304097828350233, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: accelerationRate
+      value: 0.015
       objectReference: {fileID: 0}
     - target: {fileID: 7863304097828350235, guid: f08922648400b314cb38afc817cf34b4, type: 3}
       propertyPath: m_RootOrder

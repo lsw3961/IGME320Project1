@@ -20,7 +20,6 @@ public class Player : MonoBehaviour
     // setting speed-related variables
     public float maxSpeed = 0.01f;
     public float turnSpeed = 0.5f;
-    private float trueTurnSpeed = 0f;
     [SerializeField] private float projectileSpeed = 5f;
     [SerializeField] string projectileName;
     // declaring variable 
@@ -33,7 +32,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Mouse0)) 
         {
             GameObject temp = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
             if (temp != null)
@@ -43,23 +42,12 @@ public class Player : MonoBehaviour
                 temp.GetComponent<Bullet>().SetDirection(direction,projectileSpeed);
             }
         }
-        // check if user is pressing left or right or nothing then applies appropriate turn speed
-        if (Input.GetKey("left"))
-        {
-            trueTurnSpeed = turnSpeed;
-        }
-        else if (Input.GetKey("right"))
-        {
-            trueTurnSpeed = -1 * turnSpeed;
-        }
-        else
-        {
-            trueTurnSpeed = 0;
-        }
-
         LookAtMouse();
-        PushPlayer();
+    }
 
+    void FixedUpdate()
+    {
+        PushPlayer();
         // Limit our velocity so that the player doesn't go too fast
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
 

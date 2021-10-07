@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     private Vector2 velocity;
     private Vector2 push;
     private Vector2 targetLocation;
+    private bool shouldSeek = true;
 
     // Start is called before the first frame update
     void Start()
@@ -32,9 +33,11 @@ public class Enemy : MonoBehaviour
         targetLocation.y = player.gameObject.transform.position.y;
         position.x = transform.position.x;
         position.y = transform.position.y;
-
-        Chase();
-        Move();
+        if (shouldSeek)
+        {
+            Chase();
+            Move();
+        }
 
         //Set actual position to calculated position
         transform.position = new Vector3(position.x, position.y, 0);
@@ -49,6 +52,13 @@ public class Enemy : MonoBehaviour
             //Destroy the bullet and the enemy
             other.gameObject.SetActive(false);
             Destroy(this.gameObject);
+        }
+        //If enemy hits player
+        if (other.gameObject.tag == "Player")
+        {
+            //Destroy the player and stop behavior
+            other.gameObject.SetActive(false);
+            shouldSeek = false;
         }
     }
 
