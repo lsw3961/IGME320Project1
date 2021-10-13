@@ -1,3 +1,5 @@
+//Author: Michael Chan
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,19 +11,24 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private float maxSpeed = 1;
     [SerializeField] private float acceleration = 1;
+    private int _health = 3;
 
     //Vectors used in calculating movement
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 push;
-    private Vector2 targetLocation;
+    private Vector2 targetVelocity;
     private bool shouldSeek = true;
+
+    //Getter for health field
+    public int Health
+    { get { return _health; } }
 
     // Start is called before the first frame update
     void Start()
     {
         //Populate values to minimize errors
-        targetLocation = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
+        targetVelocity = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
         position = new Vector2(transform.position.x, transform.position.y);
     }
 
@@ -29,8 +36,8 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         //Update properties to reflect actual gamestate
-        targetLocation.x = player.gameObject.transform.position.x;
-        targetLocation.y = player.gameObject.transform.position.y;
+        targetVelocity = player.gameObject.transform.position - transform.position;
+        targetVelocity = targetVelocity.normalized * maxSpeed;
         position.x = transform.position.x;
         position.y = transform.position.y;
         if (shouldSeek)
@@ -49,9 +56,7 @@ public class Enemy : MonoBehaviour
         //If bullet hits enemy
         if (other.gameObject.tag == "Projectile")
         {
-            //Destroy the bullet and the enemy
-            other.gameObject.SetActive(false);
-            Destroy(this.gameObject);
+            TakeDamage(other.gameObject);
         }
         //If enemy hits player
         if (other.gameObject.tag == "Player")
@@ -60,6 +65,21 @@ public class Enemy : MonoBehaviour
             other.gameObject.SetActive(false);
             shouldSeek = false;
         }
+    }
+
+    /// <summary>
+    /// Causes the enemy to lose a health point
+    /// </summary>
+    /// <returns>Returns true if this enemy survives the hit</returns>
+    public void TakeDamage(GameObject other)
+    {
+        //Destroy the bullet and decrement health
+        other.SetActive(false);
+        _health--;
+
+        //Kill enemy if no health
+        if (_health <= 0)
+            Destroy(this.gameObject);
     }
 
     //Moves the position of the enemy on the screen based on current velocity and acceleration
@@ -79,7 +99,8 @@ public class Enemy : MonoBehaviour
     //Modifies the push vector to direct the enemy towards the player
     private void Chase()
     {
-        push = targetLocation - position;
+        //Accelerates the enemy to alter its course directly towards the player
+        push = targetVelocity - velocity;
 
         //Caps acceleration
         if (push.magnitude > acceleration)
