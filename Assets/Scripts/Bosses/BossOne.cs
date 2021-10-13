@@ -15,6 +15,9 @@ public class BossOne : MonoBehaviour
 {
     //Player to target
     [SerializeField] private GameObject player;
+    //Attack prefabs
+    [SerializeField] private GameObject sweep;
+    [SerializeField] private GameObject bullet;
 
     //Fields
     private bool _isAlive = true;
@@ -75,12 +78,22 @@ public class BossOne : MonoBehaviour
         switch (state)
         {
             case AttackMode.Slash:
-
+                if (!coolingDown)
+                {
+                    AttackSweep sweepBox = GameObject.Instantiate(sweep).GetComponent<AttackSweep>();
+                    sweepBox.Origin = transform.position;
+                    sweepBox.SweepTime = 1.0f;
+                    sweepBox.HangTime = 0.5f;
+                    sweepBox.Direction = (3.0f * Mathf.PI) / 2.0f;
+                    sweepBox.Length = 2.0f;
+                    coolingDown = true;
+                }
                 //TRANSITION into ShSpread, ShStraight, or ShPlus
-                if (cooldownTime > 0.5f)
-                    ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
+                if (cooldownTime > 1.5f)
+                    //ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
+                    ChangeState(AttackMode.Slash);
                 break;
-            case AttackMode.Lunge:
+            /*case AttackMode.Lunge:
                 walking = true;
 
                 //TRANSITION into ShSpread or ShPlus
@@ -105,6 +118,7 @@ public class BossOne : MonoBehaviour
                 if (cooldownTime > 1.0f)
                     ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.Lunge});
                 break;
+            */
             default:
                 state = AttackMode.Slash;
                 break;
@@ -133,6 +147,8 @@ public class BossOne : MonoBehaviour
     private void ChangeState(AttackMode targetState)
     {
         stateTime = 0.0f;
+        coolingDown = false;
+        cooldownTime = 0;
     }
 
     /// <summary>
