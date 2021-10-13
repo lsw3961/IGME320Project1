@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float maxSpeed = 1;
     [SerializeField] private float acceleration = 1;
     private int _health = 3;
+    private int damage = 1;
 
     //Vectors used in calculating movement
     private Vector2 position;
@@ -62,8 +63,9 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             //Destroy the player and stop behavior
-            other.gameObject.SetActive(false);
-            shouldSeek = false;
+            //other.gameObject.SetActive(false);
+            //shouldSeek = false;
+            player.GetComponent<Player>().TakeDamage(damage);
         }
     }
 

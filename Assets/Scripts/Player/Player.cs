@@ -26,12 +26,32 @@ public class Player : MonoBehaviour
 
     private Vector2 lookOffset = new Vector2(0, 1);
 
+    //invulnerability fields
+    private int health = 3;
+    public float invTime = 2.0f;        //time spent invincible
+    private float invTimer;             //invincibility timer
+    private bool invulnerable = false;  //is player invincible
+    private SpriteRenderer sprite;
+
+    //dodge roll/dash fields
+    public float dashDist = 1f;
+    private float dashSpeed;
+    private bool dashing = false;
+    public float dashTime = .5f;
+    private float dashTimer;
+
+    public int Health { get { return health; } }
+
     private void Start()
     {
+        invTimer = invTime;
+        dashTimer = dashTime;
+        sprite = GetComponent<SpriteRenderer>();
     }
     // Update is called once per frame
     void Update()
     {
+        //Spawn bullet
         if (Input.GetKeyDown(KeyCode.Mouse0)) 
         {
             GameObject temp = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
@@ -43,13 +63,34 @@ public class Player : MonoBehaviour
             }
         }
         LookAtMouse();
+
+        //invlnerability frames
+        if (invulnerable && invTimer >= 0.0f)
+            invTimer -= Time.deltaTime;
+        else
+        {
+            invulnerable = false;
+            invTimer = invTime;
+        }
+
+        //player flashes grey while invincible
+        if (invulnerable && sprite.color == Color.white)
+            sprite.color = Color.grey;
+        else if (invulnerable && sprite.color == Color.grey)
+            sprite.color = Color.white;
+        else
+            sprite.color = Color.white;
     }
 
     void FixedUpdate()
     {
-        PushPlayer();
+        if(!dashing)
+            PushPlayer();
         // Limit our velocity so that the player doesn't go too fast
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+
+        //player dodges in direction they are moving
+        ProcessDash();
 
         // add our velocity to our position
         playerPosition += velocity;
@@ -58,6 +99,8 @@ public class Player : MonoBehaviour
 
         // set the player's rotation to match the direction
         transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+
+        
     }
 
     //Points the player sprite directly towards the mouse
@@ -92,5 +135,46 @@ public class Player : MonoBehaviour
             velocity *= decelerationRate;
         //Add acceleration to velocity
         velocity += acceleration;
+    }
+
+    //Player takes damage and becomes invincible when they are hit
+    public void TakeDamage(int amount)
+    {
+        if (!invulnerable && !dashing)
+        {
+            invulnerable = true;
+        }
+    }
+
+    //Handle dash calculations
+    private void ProcessDash()
+    {
+        if (!dashing && Input.GetKeyDown(KeyCode.Space))
+        {
+            dashing = true;
+            dashTimer = dashTime;
+            direction = velocity.normalized;
+
+            //send player backwards if standing still
+            if (!Input.GetKey(KeyCode.W) &&
+                !Input.GetKey(KeyCode.A) &&
+                !Input.GetKey(KeyCode.S) &&
+                !Input.GetKey(KeyCode.D))
+            {
+                direction *= -1;
+            }
+        }
+
+        if (dashing && dashTimer >= 0.0f)
+        {
+            dashTimer -= Time.deltaTime;
+
+            direction = velocity.normalized;
+            velocity = (dashDist / dashTime) * direction;
+
+            if (dashTimer <= 0.0f)
+                Debug.Log("dash over");
+                //dashing = false;
+        }
     }
 }
