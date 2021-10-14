@@ -69,6 +69,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        //If sword hits enemy
+        if (other.gameObject.tag == "Melee")
+        {
+            Debug.Log("Bruh");
+            TakeDamage(2);
+        }
+    }
+
     /// <summary>
     /// Causes the enemy to lose a health point
     /// </summary>
@@ -78,6 +88,15 @@ public class Enemy : MonoBehaviour
         //Destroy the bullet and decrement health
         other.SetActive(false);
         _health--;
+
+        //Kill enemy if no health
+        if (_health <= 0)
+            Destroy(this.gameObject);
+    }
+
+    public void TakeDamage(int value)
+    {
+        _health = _health - value;
 
         //Kill enemy if no health
         if (_health <= 0)

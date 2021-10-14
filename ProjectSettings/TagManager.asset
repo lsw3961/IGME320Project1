@@ -7,6 +7,7 @@ TagManager:
   - Projectile
   - Destructible
   - Enemy
+  - Melee
   layers:
   - Default
   - TransparentFX
