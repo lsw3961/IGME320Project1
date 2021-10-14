@@ -248,6 +248,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: testplayer
       objectReference: {fileID: 0}
+    - target: {fileID: 7863304097828350233, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: dashDist
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7863304097828350233, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: dashTime
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7863304097828350235, guid: f08922648400b314cb38afc817cf34b4, type: 3}
       propertyPath: m_RootOrder
       value: 8

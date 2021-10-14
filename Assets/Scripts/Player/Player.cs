@@ -34,11 +34,12 @@ public class Player : MonoBehaviour
     private SpriteRenderer sprite;
 
     //dodge roll/dash fields
-    public float dashDist = 1f;
-    private float dashSpeed;
+    public float dashDist = .05f;
     private bool dashing = false;
-    public float dashTime = .5f;
+    public float dashTime = .3f;
     private float dashTimer;
+    public float dashCooldown = .5f;
+    private float dashCooldownTimer;
 
     public int Health { get { return health; } }
 
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour
         invTimer = invTime;
         dashTimer = dashTime;
         sprite = GetComponent<SpriteRenderer>();
+        dashCooldownTimer = 0.0f;
     }
     // Update is called once per frame
     void Update()
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour
                 temp.GetComponent<Bullet>().SetDirection(direction,projectileSpeed);
             }
         }
+
         LookAtMouse();
 
         //invlnerability frames
@@ -98,7 +101,8 @@ public class Player : MonoBehaviour
         transform.position = playerPosition;
 
         // set the player's rotation to match the direction
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+        if(!dashing)
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
 
         
     }
@@ -143,38 +147,48 @@ public class Player : MonoBehaviour
         if (!invulnerable && !dashing)
         {
             invulnerable = true;
+            health -= amount;
         }
     }
 
-    //Handle dash calculations
+    //Handle dash calculations and timers
     private void ProcessDash()
     {
-        if (!dashing && Input.GetKeyDown(KeyCode.Space))
+        if (!dashing && Input.GetKey(KeyCode.Space) && dashCooldownTimer <= 0.0f)
         {
             dashing = true;
             dashTimer = dashTime;
-            direction = velocity.normalized;
-
-            //send player backwards if standing still
-            if (!Input.GetKey(KeyCode.W) &&
-                !Input.GetKey(KeyCode.A) &&
-                !Input.GetKey(KeyCode.S) &&
-                !Input.GetKey(KeyCode.D))
-            {
-                direction *= -1;
-            }
+            //Debug.Log("Dash, direction: " + direction.x + ", " + direction.y);
         }
 
         if (dashing && dashTimer >= 0.0f)
         {
             dashTimer -= Time.deltaTime;
 
-            direction = velocity.normalized;
+            //send player backwards if standing still or slowing down
+            //BUG: since this checks for if the player has a low velocity, the player will dash backwards
+            //if attempting to dash when changing directions (left <-> right / up <-> down), since the players
+            //speed gets below the threshold when pressing an opposing direction button, prevents using
+            //a dash to change directions quickly
+            if (velocity.sqrMagnitude < Mathf.Pow(maxSpeed, 2) / 16)
+                direction *= -1;
+            else
+                direction = velocity.normalized;
+
             velocity = (dashDist / dashTime) * direction;
 
             if (dashTimer <= 0.0f)
-                Debug.Log("dash over");
-                //dashing = false;
+            {
+                //Debug.Log("dash over");
+                dashing = false;
+                dashCooldownTimer = dashCooldown;
+                velocity = Vector3.zero;
+            }
+        }
+
+        if (dashCooldownTimer > 0.0f)
+        {
+            dashCooldownTimer -= Time.deltaTime;
         }
     }
 }
