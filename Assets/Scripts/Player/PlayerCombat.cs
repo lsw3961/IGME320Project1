@@ -25,7 +25,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (onCoolDown == false && active == false)
         {
-            Debug.Log("Hello");
+            //Debug.Log("Hello");
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 swordCollider.enabled = true;
