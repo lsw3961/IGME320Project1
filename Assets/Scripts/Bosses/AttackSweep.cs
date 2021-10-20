@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AttackSweep : BossAttack
 {
+    [SerializeField] private float defaultScale;
+
     //Fields
     private float timer;
     private float _sweepTime;
@@ -54,13 +56,20 @@ public class AttackSweep : BossAttack
         _origin = new Vector2(transform.position.x, transform.position.y);
         _direction = 0.0f;
         _length = 1.0f;*/
+        transform.position = new Vector3(
+            _origin.x + ((_length / 2) * Mathf.Cos(_direction + (Mathf.PI / 2)) * extendProgress),
+            _origin.y + ((_length / 2) * Mathf.Sin(_direction + (Mathf.PI / 2)) * extendProgress),
+            transform.position.z
+        );
     }
 
     // Update is called once per frame
     protected override void Update()
     {
+        timer += Time.deltaTime;
+
         //Update the progress in each stage to a value between 0 and 1 representing the end and beginning of that stage
-        if (timer > 0 && timer < _sweepTime)
+        if (timer < _sweepTime)
         {
             extendProgress = timer / _sweepTime;
             hangProgress = 0.0f;
@@ -78,17 +87,21 @@ public class AttackSweep : BossAttack
             hangProgress = 0.0f;
             retractProgress = (timer - (_sweepTime + _hangTime)) / (_sweepTime);
         }
-        timer += Time.deltaTime;
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
         //Extension period
         if (extendProgress > 0.0f)
         {
             //Adjusts the x component of scale
-            transform.localScale = new Vector3(_length * extendProgress, 1.0f, 1.0f);
+            transform.localScale = new Vector3(_length * extendProgress * defaultScale, defaultScale, defaultScale);
 
             //Adjusts the x component of position
             transform.position = new Vector3(
-                _origin.x + ((_length / 2) * Mathf.Cos(_direction + (Mathf.PI / 2)) * extendProgress),
-                _origin.y + ((_length / 2) * Mathf.Sin(_direction + (Mathf.PI / 2)) * extendProgress),
+                transform.position.x + ((_length / 2) * Mathf.Cos(_direction + (Mathf.PI / 2)) * extendProgress),
+                transform.position.y + ((_length / 2) * Mathf.Sin(_direction + (Mathf.PI / 2)) * extendProgress),
                 transform.position.z
                 ); 
         }
@@ -96,7 +109,7 @@ public class AttackSweep : BossAttack
         else if (hangProgress > 0.0f)
         {
             //Adjusts the x component of scale
-            transform.localScale = new Vector3(_length, 1.0f, 1.0f);
+            transform.localScale = new Vector3(_length * defaultScale, defaultScale, defaultScale);
 
             //Moves the sweep rectangle to the end and rotates it, so that retraction works in the correct direction
             transform.position = new Vector3(
@@ -113,9 +126,9 @@ public class AttackSweep : BossAttack
             //Adjusts the x component of scale
             //transform.localScale = new Vector3((((_sweepTime / 2) + _hangTime) - timer) * _length, transform.localScale.y, transform.localScale.z);
             transform.localScale = new Vector3(
-                _length * (1 - extendProgress),
-                transform.localScale.y, 
-                transform.localScale.z);
+                _length * (1 - extendProgress) * defaultScale,
+                defaultScale,
+                defaultScale);
             //Adjusts the x component of position
             transform.position = new Vector3(
                 (_origin.x + _length) - (_length * retractProgress),
@@ -123,9 +136,6 @@ public class AttackSweep : BossAttack
                 transform.position.z
                 );
         }
-        //End of sweep
-        else
-            Destroy(this.gameObject);
 
     }
 }

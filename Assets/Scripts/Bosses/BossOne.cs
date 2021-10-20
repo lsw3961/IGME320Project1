@@ -4,6 +4,7 @@ using UnityEngine;
 
 enum AttackMode
 {
+    Wander,
     Slash,
     Lunge,
     ShootStraight,
@@ -60,7 +61,10 @@ public class BossOne : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Tracks the time a state has been active
         stateTime += Time.deltaTime;
+
+        //If an animation is cooling down, add time so it knows when to transition
         if (coolingDown)
             cooldownTime += Time.deltaTime;
 
@@ -78,52 +82,74 @@ public class BossOne : MonoBehaviour
         else
             walking = true;
 
+        if (state != AttackMode.Wander)
+            velocity = new Vector2(0.0f, 0.0f);
+
+        Debug.Log(state);
         switch (state)
         {
+            case AttackMode.Wander:
+                if (!coolingDown)
+                {
+                    stateDuration = Mathf.Pow(Random.Range(1.0f, 1.5f), 2) + 2;
+                    coolingDown = true;
+                }
+                Chase();
+                Move();
+                //TRANSITION into Slash, Lunge, or ShStraight (uses a different detection due to flexible state duration
+                if (stateTime > stateDuration)
+                    ChangeState(new List<AttackMode> { AttackMode.Slash, AttackMode.Lunge, AttackMode.ShootStraight });
+                break;
             case AttackMode.Slash:
                 if (!coolingDown)
                 {
-                    AttackSweep sweepBox = GameObject.Instantiate(sweep).GetComponent<AttackSweep>();
-                    sweepBox.transform.parent = this.gameObject.transform;
-                    float direction = Mathf.Atan2(transform.rotation.y, transform.rotation.x);
-                    sweepBox.Origin = new Vector2(transform.position.x + (sweepOffset * Mathf.Cos(direction)), transform.position.y + (sweepOffset * Mathf.Sin(direction)));
-                    sweepBox.SweepTime = 2.0f;
-                    sweepBox.HangTime = 0.5f;
-                    sweepBox.Direction = (3.0f * Mathf.PI) / 2.0f;
-                    sweepBox.Length = 2.0f;
+                    //START SLASH ANIMATION HERE
                     coolingDown = true;
                 }
                 //TRANSITION into ShSpread, ShStraight, or ShPlus
-                if (cooldownTime > 1.5f)
-                    //ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
-                    ChangeState(AttackMode.Slash);
+                if (cooldownTime > 2.5f)
+                    ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
                 break;
-            /*case AttackMode.Lunge:
-                walking = true;
-
+            case AttackMode.Lunge:
+                if (!coolingDown)
+                {
+                    //START ANIMATION HERE
+                    coolingDown = true;
+                }
                 //TRANSITION into ShSpread or ShPlus
-                if (cooldownTime > 2.0f)
+                if (cooldownTime > 1.2f)
                     ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootPlus });
                 break;
             case AttackMode.ShootSpread:
-
-                //TRANSITION into Slash
+                if (!coolingDown)
+                {
+                    //START ANIMATION HERE
+                    coolingDown = true;
+                }
+                //TRANSITION into Wander (biased 3x) or Slash
                 if (cooldownTime > 0.75f)
-                    ChangeState(AttackMode.Slash);
+                    ChangeState(3, new List<AttackMode> { AttackMode.Wander, AttackMode.Slash });
                 break;
             case AttackMode.ShootStraight:
-
-                //TRANSITION into ShSpread, ShStraight, or ShPlus (Yes, it can transition into itself
+                if (!coolingDown)
+                {
+                    //START ANIMATION HERE
+                    coolingDown = true;
+                }
+                //TRANSITION into ShSpread, ShStraight, ShPlus, or Wander (Yes, it can transition into itself)
                 if (cooldownTime > 0.35f)
-                    ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
+                    ChangeState(3, new List<AttackMode> { AttackMode.Wander, AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
                 break;
             case AttackMode.ShootPlus:
-
-                //TRANSITION into ShPlus or Lunge
-                if (cooldownTime > 1.0f)
-                    ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.Lunge});
+                if (!coolingDown)
+                {
+                    //START ANIMATION HERE
+                    coolingDown = true;
+                }
+                //TRANSITION into Wander (biased 3x), ShPlus, or Lunge
+                if (cooldownTime > 2.0f)
+                    ChangeState(3, new List<AttackMode> { AttackMode.Wander, AttackMode.ShootPlus, AttackMode.Lunge });
                 break;
-            */
             default:
                 state = AttackMode.Slash;
                 break;
@@ -151,6 +177,7 @@ public class BossOne : MonoBehaviour
     /// <param name="targetState"></param>
     private void ChangeState(AttackMode targetState)
     {
+        state = targetState;
         stateTime = 0.0f;
         coolingDown = false;
         cooldownTime = 0;
@@ -163,6 +190,29 @@ public class BossOne : MonoBehaviour
     private void ChangeState(List<AttackMode> possibleStates)
     {
         ChangeState(possibleStates[Random.Range(0, possibleStates.Count)]);
+    }
+
+    /// <summary>
+    /// Chooses a random state to enter from the given list
+    /// </summary>
+    /// <param name="firstBias">Integer multiplier for how much more likely the first option is to be chosen</param>
+    /// <param name="possibleStates"></param>
+    private void ChangeState(int firstBias, List<AttackMode> possibleStates)
+    {
+        List<AttackMode> biasedList = new List<AttackMode>();
+        for(int i = 0; i < possibleStates.Count; i++)
+        {
+            //Adds the first entry as many times as the bias calls for
+            if (i == 0)
+            {
+                for (int j = 0; j < firstBias; j++)
+                    biasedList.Add(possibleStates[0]);
+            }
+            //Adds the rest of the entries from the original list
+            else
+                biasedList.Add(possibleStates[i]);
+        }
+        ChangeState(biasedList);
     }
 
     //Moves the position of the boss on the screen based on current velocity and acceleration
