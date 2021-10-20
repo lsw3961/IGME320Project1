@@ -76,13 +76,7 @@ public class Player : MonoBehaviour
             invTimer = invTime;
         }
 
-        //player flashes grey while invincible
-        if (invulnerable && sprite.color == Color.white)
-            sprite.color = Color.grey;
-        else if (invulnerable && sprite.color == Color.grey)
-            sprite.color = Color.white;
-        else
-            sprite.color = Color.white;
+        //player flashes grey Done in animation
     }
 
     void FixedUpdate()
