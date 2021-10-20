@@ -18,6 +18,9 @@ public class BossOne : MonoBehaviour
     //Attack prefabs
     [SerializeField] private GameObject sweep;
     [SerializeField] private GameObject bullet;
+    //Swipe properties
+    [SerializeField] private float sweepOffset;
+    [SerializeField] private float sweepSize;
 
     //Fields
     private bool _isAlive = true;
@@ -81,8 +84,10 @@ public class BossOne : MonoBehaviour
                 if (!coolingDown)
                 {
                     AttackSweep sweepBox = GameObject.Instantiate(sweep).GetComponent<AttackSweep>();
-                    sweepBox.Origin = transform.position;
-                    sweepBox.SweepTime = 1.0f;
+                    sweepBox.transform.parent = this.gameObject.transform;
+                    float direction = Mathf.Atan2(transform.rotation.y, transform.rotation.x);
+                    sweepBox.Origin = new Vector2(transform.position.x + (sweepOffset * Mathf.Cos(direction)), transform.position.y + (sweepOffset * Mathf.Sin(direction)));
+                    sweepBox.SweepTime = 2.0f;
                     sweepBox.HangTime = 0.5f;
                     sweepBox.Direction = (3.0f * Mathf.PI) / 2.0f;
                     sweepBox.Length = 2.0f;
