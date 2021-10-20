@@ -14,6 +14,9 @@ public class Bullet : MonoBehaviour
     private float xOffset;
     private float yOffset;
 
+    public float bulletLife = 1.0f;
+    private float bulletLifeTimer;
+
     private void Awake()
     {
         mainCamera = Camera.main;
@@ -27,12 +30,19 @@ public class Bullet : MonoBehaviour
     {
         //only set velocity when bullet is enabled
         gameObject.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+        bulletLifeTimer = bulletLife;
     }
 
     
     void Update()
     {
-        OutOfBounds();
+        //OutOfBounds();
+
+        //bullets disappear after certain time
+        if (bulletLifeTimer > 0.0f)
+            bulletLifeTimer -= Time.deltaTime;
+        else
+            gameObject.SetActive(false);
     }
 
     public void SetDirection(Vector2 dir, float speed) 
