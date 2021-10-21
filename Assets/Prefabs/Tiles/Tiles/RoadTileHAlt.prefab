@@ -10,10 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 615167376353046910}
   - component: {fileID: 1650696334197487084}
-  - component: {fileID: 3726651912508381282}
-  - component: {fileID: -5954009625563690700}
   m_Layer: 0
-  m_Name: FenceTileH
+  m_Name: RoadTileHAlt
   m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,8 +70,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -5
-  m_Sprite: {fileID: 21300000, guid: 765db7bfd0c5f5641945bca7e9875b53, type: 3}
+  m_SortingOrder: -1
+  m_Sprite: {fileID: 21300000, guid: d47947ed37c30554da6c6078e04ce381, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -84,46 +82,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3726651912508381282
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2630194638896139340}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0011671185, y: 0.00023500621}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.1464509, y: 0.2857307}
-  m_EdgeRadius: 0
---- !u!114 &-5954009625563690700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2630194638896139340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f1f4e54876f97149991450f549f30fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Health: 3
-  collisionNames:
-  - Projectile
-  - Player
-  - Enemy
