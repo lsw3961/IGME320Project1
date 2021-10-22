@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Kenneth Rossi
 // 10/6/2021
@@ -26,7 +27,7 @@ public class Player : MonoBehaviour
     //invulnerability fields
     private int health = 3;
     public float invTime = 2.0f;        //time spent invincible
-    private float invTimer;             //invincibility timer
+    [SerializeField] private float invTimer;             //invincibility timer
     private bool invulnerable = false;  //is player invincible
     private SpriteRenderer sprite;
 
@@ -142,6 +143,11 @@ public class Player : MonoBehaviour
         {
             invulnerable = true;
             health -= amount;
+        }
+
+        if (health <= 0)
+        {
+            SceneManager.LoadScene("Game Over");
         }
     }
 
