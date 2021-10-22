@@ -7,6 +7,7 @@ public class LevelGeneration : MonoBehaviour
     public Transform[] startingPositions;
     public GameObject[] rooms;//index 0 --> LR, index 1 --> LRB, index 2 --> LRT, index 3 --> ALL,
     public GameObject player;
+    [SerializeField] GameObject endLevel;
     public LayerMask room;
 
     private int direction;
@@ -18,10 +19,12 @@ public class LevelGeneration : MonoBehaviour
     public float minY;
 
     private int downCounter;
+    private bool exitIsMade;
 
 
     private void Start()
     {
+        exitIsMade = false;
         direction = Random.Range(1, 6);
         int randStartingPos = Random.Range(0, startingPositions.Length);
         transform.position = startingPositions[randStartingPos].position;
@@ -36,10 +39,12 @@ public class LevelGeneration : MonoBehaviour
             Move();
 
         }
-        else if (stopGeneration)
+        else if (stopGeneration && !exitIsMade)
         {
-            int randomX = Random.Range(-3, 6);
-            int randomY = Random.Range(-3, 6);
+            exitIsMade = true;
+            float randomX = Random.Range(-3, 6);
+            float randomY = Random.Range(-3, 6);
+            Instantiate(endLevel, new Vector3(transform.position.x + randomX, transform.position.y + randomY,0.0f), Quaternion.identity);
         }
     }
 

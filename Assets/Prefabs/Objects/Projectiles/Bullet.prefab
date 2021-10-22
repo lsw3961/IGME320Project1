@@ -144,3 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817d266531ccfd2488d4d4f5d42eed24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitNames:
+  - Destructible
+  - Enemy
+  - Enviroment
+  bulletLife: 1

@@ -13,7 +13,7 @@ public class CreateRoom : MonoBehaviour
         {
             int rand = Random.Range(0, levelGen.rooms.Length);
             GameObject obj = Instantiate(levelGen.rooms[rand], transform.position, Quaternion.identity);
-            Destroy(this);
+            Destroy(this.gameObject);
         }
     }
 

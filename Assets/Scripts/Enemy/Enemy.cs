@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         //Populate values to minimize errors
         targetVelocity = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
         position = new Vector2(transform.position.x, transform.position.y);
@@ -54,6 +55,7 @@ public class Enemy : MonoBehaviour
     //Unity Collision Detection 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        Debug.Log("enemy Hit" + other.gameObject.tag);
         //If bullet hits enemy
         if (other.gameObject.tag == "Projectile")
         {
@@ -67,15 +69,11 @@ public class Enemy : MonoBehaviour
             //shouldSeek = false;
             player.GetComponent<Player>().TakeDamage(damage);
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
         //If sword hits enemy
         if (other.gameObject.tag == "Melee")
         {
             Debug.Log("Bruh");
-            TakeDamage(2);
+            TakeDamage(3);
         }
     }
 
@@ -91,7 +89,7 @@ public class Enemy : MonoBehaviour
 
         //Kill enemy if no health
         if (_health <= 0)
-            Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
     }
 
     public void TakeDamage(int value)
@@ -100,7 +98,7 @@ public class Enemy : MonoBehaviour
 
         //Kill enemy if no health
         if (_health <= 0)
-            Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
     }
 
     //Moves the position of the enemy on the screen based on current velocity and acceleration

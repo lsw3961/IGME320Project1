@@ -13,6 +13,7 @@ public class Bullet : MonoBehaviour
     private float screenWidth;
     private float xOffset;
     private float yOffset;
+    [SerializeField] List<string> hitNames;
 
     public float bulletLife = 1.0f;
     private float bulletLifeTimer;
@@ -29,7 +30,7 @@ public class Bullet : MonoBehaviour
     private void OnEnable()
     {
         //only set velocity when bullet is enabled
-        gameObject.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(direction.x*projectileSpeed, direction.y*projectileSpeed);
         bulletLifeTimer = bulletLife;
     }
 
@@ -61,5 +62,17 @@ public class Bullet : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        for (int i = 0; i < hitNames.Count; i++)
+        {
+            if (collision.gameObject.tag == hitNames[i]) 
+            {
+                this.gameObject.SetActive(false);
+                return;
+            }
+        }
+
     }
 }

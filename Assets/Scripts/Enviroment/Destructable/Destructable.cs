@@ -8,18 +8,17 @@ public class Destructable : MonoBehaviour
     [SerializeField] private string[] collisionNames;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Hit");
         for (int i = 0;i<collisionNames.Length;i++) 
         {
             if (collision.gameObject.tag == collisionNames[i])
             {
                 if (collision.gameObject.tag == "Projectile")
                     collision.gameObject.SetActive(false);
-
+                Health--;
                 if (Health <= 0) 
                 {
                     //play destrction animation
-                    Debug.Log("Hit");
+                    //Debug.Log("Hit");
                     //destroy the object
                     this.gameObject.SetActive(false);
                 }

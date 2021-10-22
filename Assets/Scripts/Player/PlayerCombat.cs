@@ -12,6 +12,7 @@ public class PlayerCombat : MonoBehaviour
     public float activeTime = 1.5f;
     public float activeTimer;
     private bool active = false;
+    [SerializeField] Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +29,7 @@ public class PlayerCombat : MonoBehaviour
             //Debug.Log("Hello");
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
+                anim.SetTrigger("meleeTrigger");
                 swordCollider.enabled = true;
                 testHitbox.enabled = true;
                 active = true;
