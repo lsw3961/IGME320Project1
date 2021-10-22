@@ -8,23 +8,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Declaring all necessary fields
-    public Vector3 playerPosition = new Vector3(0, 0, 0);
-    // direction that the player is facing
-    public Vector3 direction = new Vector3(0, 1, 0);
-    private Vector3 velocity = Vector3.zero;
-    private Vector3 acceleration = Vector3.zero;
-    // setting variables for acceleration and deceleration rates
-    public float accelerationRate = 0.001f;
-    public float decelerationRate = 0.4f;
-    // setting speed-related variables
-    public float maxSpeed = 0.01f;
-    public float turnSpeed = 0.5f;
+    public float moveSpeed = 5f;
+    public float dashSpeed = 10f;
+    public Rigidbody2D playerBody;
+
     [SerializeField] private float projectileSpeed = 5f;
     [SerializeField] string projectileName;
-    // declaring variable 
+    [SerializeField] public Vector3 direction;
+    private float rotateAngle;
 
-    private Vector2 lookOffset = new Vector2(0, 1);
+    
+    [SerializeField] private Vector2 movement;
+    private float dashMovementX;
+    private float dashMovementY;
+    [SerializeField] private Vector2 dashMovement;
 
     //invulnerability fields
     private int health = 3;
@@ -34,38 +31,49 @@ public class Player : MonoBehaviour
     private SpriteRenderer sprite;
 
     //dodge roll/dash fields
-    public float dashDist = .05f;
-    private bool dashing = false;
-    public float dashTime = .3f;
-    private float dashTimer;
-    public float dashCooldown = .5f;
-    private float dashCooldownTimer;
+    public float coolDownTime = 1.5f;
+    public float coolDownTimer;
+    private bool onCoolDown = false;
+    public float activeTime = 1.5f;
+    public float activeTimer;
+    private bool active = false;
 
     public int Health { get { return health; } }
 
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         invTimer = invTime;
-        dashTimer = dashTime;
         sprite = GetComponent<SpriteRenderer>();
-        dashCooldownTimer = 0.0f;
+        playerBody = GetComponent<Rigidbody2D>();
     }
+
     // Update is called once per frame
     void Update()
     {
+        // Grab input and store in vector
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.y = Input.GetAxisRaw("Vertical");
+        movement.Normalize();
+
+        // Rotate player to mouse position
+        direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        direction.Normalize();
+        rotateAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        // transform.rotation = Quaternion.Euler(0f, 0f, rotateAngle);
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+
         //Spawn bullet
-        if (Input.GetKeyDown(KeyCode.Mouse0)) 
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             GameObject temp = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
             if (temp != null)
             {
                 temp.transform.position = this.gameObject.transform.position;
                 //temp.transform.rotation = this.gameObject.transform.rotation;
-                temp.GetComponent<Bullet>().SetDirection(direction,projectileSpeed);
+                temp.GetComponent<Bullet>().SetDirection(direction, projectileSpeed);
             }
         }
-
-        LookAtMouse();
 
         //invlnerability frames
         if (invulnerable && invTimer >= 0.0f)
@@ -77,112 +85,64 @@ public class Player : MonoBehaviour
         }
 
         //player flashes grey Done in animation
+
+        // If not in dash and space is pressed start dash
+        if (!active && !onCoolDown)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                active = true;
+                activeTimer = activeTime;
+            }
+            dashMovementX = movement.x;
+            dashMovementY = movement.y;
+            dashMovement = new Vector2(dashMovementX, dashMovementY);
+        }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if(!dashing)
-            PushPlayer();
-        // Limit our velocity so that the player doesn't go too fast
-        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+        // If not actively dashing, move normally
+        if (!active)
+        {
+            playerBody.MovePosition(playerBody.position + movement * moveSpeed * Time.fixedDeltaTime);
+        }
 
-        //player dodges in direction they are moving
-        ProcessDash();
-
-        // add our velocity to our position
-        playerPosition += velocity;
-        // move the player to it's new position
-        transform.position = playerPosition;
-
-        // set the player's rotation to match the direction
-        if(!dashing)
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
-
+        // If dashing
+        if (active)
+        {
+            playerBody.MovePosition(playerBody.position + dashMovement * dashSpeed * Time.fixedDeltaTime);
+            Debug.Log("In dash");
+            activeTimer -= Time.fixedDeltaTime;
+            if (activeTimer <= 0.0f)
+            {
+                active = false;
+                onCoolDown = true;
+                coolDownTimer = coolDownTime;
+            }
+        }
+        // If on cooldown, you may not dash
+        if (onCoolDown)
+        {
+            Debug.Log("Dash on cooldown");
+            coolDownTimer -= Time.fixedDeltaTime;
+            if (coolDownTimer <= 0.0f)
+            {
+                onCoolDown = false;
+                //Debug.Log("Hitbox ready to go again.");
+            }
+        }
         
-    }
-
-    //Points the player sprite directly towards the mouse
-    private void LookAtMouse()
-    {
-        lookOffset = new Vector2(
-            Camera.main.ScreenToWorldPoint(Input.mousePosition).x - playerPosition.x,
-            Camera.main.ScreenToWorldPoint(Input.mousePosition).y - playerPosition.y);
-        //direction = Mathf.Atan2(lookOffset.y, lookOffset.x);
-        direction = lookOffset.normalized;
-    }
-
-    //Uses WASD to accelerate the player. Handles deceleration
-    private void PushPlayer()
-    {
-        //Clear acceleration
-        acceleration = Vector3.zero;
-
-        //Add acceleration for each direction key pressed
-        if (Input.GetKey(KeyCode.W))
-            acceleration.y += accelerationRate;
-        if (Input.GetKey(KeyCode.A))
-            acceleration.x -= accelerationRate;
-        if (Input.GetKey(KeyCode.S))
-            acceleration.y -= accelerationRate;
-        if (Input.GetKey(KeyCode.D))
-            acceleration.x += accelerationRate;
-
-        //Cap acceleration
-        acceleration = Vector3.ClampMagnitude(acceleration, accelerationRate);
-        if (Mathf.Abs(acceleration.x) + Mathf.Abs(acceleration.y) == 0)
-            velocity *= decelerationRate;
-        //Add acceleration to velocity
-        velocity += acceleration;
     }
 
     //Player takes damage and becomes invincible when they are hit
     public void TakeDamage(int amount)
     {
-        if (!invulnerable && !dashing)
+        if (!invulnerable && !active)
         {
             invulnerable = true;
             health -= amount;
         }
     }
 
-    //Handle dash calculations and timers
-    private void ProcessDash()
-    {
-        if (!dashing && Input.GetKey(KeyCode.Space) && dashCooldownTimer <= 0.0f)
-        {
-            dashing = true;
-            dashTimer = dashTime;
-            //Debug.Log("Dash, direction: " + direction.x + ", " + direction.y);
-        }
-
-        if (dashing && dashTimer >= 0.0f)
-        {
-            dashTimer -= Time.deltaTime;
-
-            //send player backwards if standing still or slowing down
-            //BUG: since this checks for if the player has a low velocity, the player will dash backwards
-            //if attempting to dash when changing directions (left <-> right / up <-> down), since the players
-            //speed gets below the threshold when pressing an opposing direction button, prevents using
-            //a dash to change directions quickly
-            if (velocity.sqrMagnitude < Mathf.Pow(maxSpeed, 2) / 16)
-                direction *= -1;
-            else
-                direction = velocity.normalized;
-
-            velocity = (dashDist / dashTime) * direction;
-
-            if (dashTimer <= 0.0f)
-            {
-                //Debug.Log("dash over");
-                dashing = false;
-                dashCooldownTimer = dashCooldown;
-                velocity = Vector3.zero;
-            }
-        }
-
-        if (dashCooldownTimer > 0.0f)
-        {
-            dashCooldownTimer -= Time.deltaTime;
-        }
-    }
 }

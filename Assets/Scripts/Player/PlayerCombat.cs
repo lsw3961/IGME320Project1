@@ -37,7 +37,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (active)
         {
-            Debug.Log("HitBox active");
+            //Debug.Log("HitBox active");
             activeTimer -= Time.deltaTime;
             if (activeTimer <= 0.0f)
             {
@@ -51,12 +51,12 @@ public class PlayerCombat : MonoBehaviour
 
         if (onCoolDown)
         {
-            Debug.Log("HitBox on cooldown");
+            //Debug.Log("HitBox on cooldown");
             coolDownTimer -= Time.deltaTime;
             if (coolDownTimer <= 0.0f)
             {
                 onCoolDown = false;
-                Debug.Log("Hitbox ready to go again.");
+                //Debug.Log("Hitbox ready to go again.");
             }
         }
 

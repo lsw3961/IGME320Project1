@@ -279,6 +279,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 51465942}
+    - target: {fileID: 2820859141910662205, guid: f3456f9a7347bd949a6363a341f1b79b, type: 3}
+      propertyPath: maxSpeed
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3062569649412918010, guid: f3456f9a7347bd949a6363a341f1b79b, type: 3}
       propertyPath: m_Name
       value: BaseEnemy
@@ -336,6 +340,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 994225650717998527, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: dashSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 994225650717998527, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: activeTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 994225650717998527, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: coolDownTime
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 994225650717998527, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: dashCooldown
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2002452470416359756, guid: f08922648400b314cb38afc817cf34b4, type: 3}
       propertyPath: activeTime
       value: 0.25
@@ -343,6 +363,18 @@ PrefabInstance:
     - target: {fileID: 2002452470416359756, guid: f08922648400b314cb38afc817cf34b4, type: 3}
       propertyPath: coolDownTime
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4467296801614971273, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753110925232390185, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: projectileName
+      value: Projectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 7753110925232390185, guid: f08922648400b314cb38afc817cf34b4, type: 3}
+      propertyPath: projectileSpeed
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7863304097828350232, guid: f08922648400b314cb38afc817cf34b4, type: 3}
       propertyPath: m_Name

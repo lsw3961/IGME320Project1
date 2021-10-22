@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swordCollider: {fileID: 7588003010909164548}
+  testHitbox: {fileID: 0}
   coolDownTime: 1.5
   coolDownTimer: 0
   activeTime: 1.5
@@ -167,9 +168,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7863304097828350235}
   - component: {fileID: 7863304097828350234}
-  - component: {fileID: 7863304097828350233}
   - component: {fileID: 4467296801614971273}
   - component: {fileID: 7137953363790280156}
+  - component: {fileID: 994225650717998527}
   m_Layer: 0
   m_Name: testplayer
   m_TagString: Player
@@ -244,29 +245,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7863304097828350233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7863304097828350232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7f731dd5c84d8047869558aacd2b876, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPosition: {x: 0, y: 0, z: 0}
-  direction: {x: 0, y: 1, z: 0}
-  accelerationRate: 0.015
-  decelerationRate: 0.4
-  maxSpeed: 0.1
-  turnSpeed: 0.3
-  projectileSpeed: 50
-  projectileName: Projectile
-  invTime: 2
-  dashDist: 1
-  dashTime: 0.5
 --- !u!50 &4467296801614971273
 Rigidbody2D:
   serializedVersion: 4
@@ -314,3 +292,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.24429065, y: 0.21909598}
   m_EdgeRadius: 0
+--- !u!114 &994225650717998527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7863304097828350232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f731dd5c84d8047869558aacd2b876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  playerBody: {fileID: 0}
+  projectileSpeed: 50
+  projectileName: Projectile
+  direction: {x: 0, y: 1, z: 0}
+  movement: {x: 0, y: 0}
+  invTime: 2
+  dashDist: 0.05
+  dashTime: 0.3
+  dashCooldown: 0.5
