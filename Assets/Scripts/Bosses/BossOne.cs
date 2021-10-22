@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Michael Chan
+
 enum AttackMode
 {
     Wander,
@@ -18,10 +20,11 @@ public class BossOne : MonoBehaviour
     [SerializeField] private GameObject player;
     //Attack prefabs
     [SerializeField] private GameObject sweep;
-    [SerializeField] private GameObject bullet;
-    //Swipe properties
+    [SerializeField] private GameObject moonBullet;
+    //Attack properties
     [SerializeField] private float sweepOffset;
     [SerializeField] private float sweepSize;
+    [SerializeField] private float bulletSpeed;
 
     //Fields
     private bool _isAlive = true;
@@ -39,6 +42,7 @@ public class BossOne : MonoBehaviour
     private bool walking = true;
 
     //Attack management
+    private Vector2 aimDirection;
 
     //Vectors used in calculating movement
     private Vector2 position;
@@ -75,6 +79,14 @@ public class BossOne : MonoBehaviour
         if (!_isAlive)
             return;
 
+        //Update the aim direction to be a unit vector directly towards the player
+        aimDirection = new Vector2(player.gameObject.transform.position.x - position.x, player.gameObject.transform.position.y - position.y).normalized;
+        //Update properties to reflect actual gamestate
+        targetVelocity = player.gameObject.transform.position - transform.position;
+        targetVelocity = targetVelocity.normalized * maxSpeed;
+        position.x = transform.position.x;
+        position.y = transform.position.y;
+
         //If the boss has more than half health, it should not walk by default during attack (unless something like Lunge overrides it).
         // Otherwise, it walks.
         if (maxHealth / health >= 2 && !coolingDown)
@@ -82,10 +94,11 @@ public class BossOne : MonoBehaviour
         else
             walking = true;
 
+        //Freezes the boss if it is doing something besides walking around
         if (state != AttackMode.Wander)
             velocity = new Vector2(0.0f, 0.0f);
 
-        Debug.Log(state);
+
         switch (state)
         {
             case AttackMode.Wander:
@@ -124,6 +137,18 @@ public class BossOne : MonoBehaviour
                 if (!coolingDown)
                 {
                     //START ANIMATION HERE
+
+                    //Shoot three bullets in a cone at the player
+                    Shoot(aimDirection);
+                    //These are matrix rotations
+                    Shoot(new Vector2(
+                        aimDirection.x * Mathf.Cos(Mathf.PI / 9.0f) - aimDirection.y * Mathf.Sin(Mathf.PI / 9.0f),
+                        aimDirection.x * Mathf.Sin(Mathf.PI / 9.0f) + aimDirection.y * Mathf.Cos(Mathf.PI / 9.0f)
+                        ));
+                    Shoot(new Vector2(
+                        aimDirection.x * Mathf.Cos(-Mathf.PI / 9.0f) - aimDirection.y * Mathf.Sin(-Mathf.PI / 9.0f),
+                        aimDirection.x * Mathf.Sin(-Mathf.PI / 9.0f) + aimDirection.y * Mathf.Cos(-Mathf.PI / 9.0f)
+                        ));
                     coolingDown = true;
                 }
                 //TRANSITION into Wander (biased 3x) or Slash
@@ -134,6 +159,8 @@ public class BossOne : MonoBehaviour
                 if (!coolingDown)
                 {
                     //START ANIMATION HERE
+                    //Shoot a bullet directly at the player
+                    Shoot(aimDirection);
                     coolingDown = true;
                 }
                 //TRANSITION into ShSpread, ShStraight, ShPlus, or Wander (Yes, it can transition into itself)
@@ -144,6 +171,11 @@ public class BossOne : MonoBehaviour
                 if (!coolingDown)
                 {
                     //START ANIMATION HERE
+                    //Shoot a moon in all 4 directions
+                    Shoot(Vector3.up);
+                    Shoot(Vector3.down);
+                    Shoot(Vector3.left);
+                    Shoot(Vector3.right);
                     coolingDown = true;
                 }
                 //TRANSITION into Wander (biased 3x), ShPlus, or Lunge
@@ -153,18 +185,6 @@ public class BossOne : MonoBehaviour
             default:
                 state = AttackMode.Slash;
                 break;
-        }
-
-
-        //Update properties to reflect actual gamestate
-        targetVelocity = player.gameObject.transform.position - transform.position;
-        targetVelocity = targetVelocity.normalized * maxSpeed;
-        position.x = transform.position.x;
-        position.y = transform.position.y;
-        if (walking)
-        {
-            Chase();
-            Move();
         }
 
         //Set actual position to calculated position
@@ -181,6 +201,7 @@ public class BossOne : MonoBehaviour
         stateTime = 0.0f;
         coolingDown = false;
         cooldownTime = 0;
+        Debug.Log(state);
     }
 
     /// <summary>
@@ -215,10 +236,32 @@ public class BossOne : MonoBehaviour
         ChangeState(biasedList);
     }
 
-    //Moves the position of the boss on the screen based on current velocity and acceleration
+    /// <summary>
+    /// 
+    /// </summary>
+    private void Shoot(Vector2 direction)
+    {
+        GameObject shotBullet = GameObject.Instantiate(moonBullet);
+        shotBullet.transform.position = position;
+        if (shotBullet.GetComponent<AttackBullet>() != null)
+            shotBullet.GetComponent<AttackBullet>().SetVelocity(direction, bulletSpeed);
+        else
+            Destroy(shotBullet);
+    }
+
+    /// <summary>
+    /// Overloaded shoot method that takes a Vector3 and ignores the Z component
+    /// </summary>
+    private void Shoot(Vector3 direction)
+    {
+        Shoot(new Vector2(direction.x, direction.y));
+    }
+
+    /// <summary>
+    /// Moves the position of the boss on the screen based on current velocity and acceleration
+    /// </summary>
     private void Move()
     {
-        Debug.Log(velocity);
         //Applies acceleration, normalized to program speed
         velocity += push * Time.deltaTime;
 
@@ -230,7 +273,9 @@ public class BossOne : MonoBehaviour
         position += velocity * Time.deltaTime;
     }
 
-    //Modifies the push vector to direct the boss towards the player
+    /// <summary>
+    /// Modifies the push vector to direct the boss towards the player
+    /// </summary>
     private void Chase()
     {
         //Accelerates the enemy to alter its course directly towards the player

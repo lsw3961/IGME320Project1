@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Author: Michael Chan
+
 public class AttackSweep : BossAttack
 {
     [SerializeField] private float defaultScale;
@@ -49,13 +51,7 @@ public class AttackSweep : BossAttack
     // Start is called before the first frame update
     protected override void Start()
     {
-        //Safe defaulting
         timer = 0;
-        /*_sweepTime = 1.0f;
-        _hangTime = 0.1f;
-        _origin = new Vector2(transform.position.x, transform.position.y);
-        _direction = 0.0f;
-        _length = 1.0f;*/
         transform.position = new Vector3(
             _origin.x + ((_length / 2) * Mathf.Cos(_direction + (Mathf.PI / 2)) * extendProgress),
             _origin.y + ((_length / 2) * Mathf.Sin(_direction + (Mathf.PI / 2)) * extendProgress),
@@ -90,6 +86,7 @@ public class AttackSweep : BossAttack
         else
         {
             Destroy(this.gameObject);
+            return;
         }
 
         //Extension period
