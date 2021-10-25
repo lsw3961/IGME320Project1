@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private float maxSpeed = 1;
     [SerializeField] private float acceleration = 1;
+    [SerializeField] private Animator anim;
     private int _health = 3;
     private int damage = 1;
 
@@ -89,6 +90,7 @@ public class Enemy : MonoBehaviour
 
         //Kill enemy if no health
         if (_health <= 0)
+            //anim.SetTrigger("isDead");
             this.gameObject.SetActive(false);
     }
 

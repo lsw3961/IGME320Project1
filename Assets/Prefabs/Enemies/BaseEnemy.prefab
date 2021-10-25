@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8467411461237615617}
   - component: {fileID: 2820859141910662205}
   - component: {fileID: -298834638234507294}
+  - component: {fileID: -1563819668365944506}
   m_Layer: 0
   m_Name: BaseEnemy
   m_TagString: Destructible
@@ -126,6 +127,7 @@ MonoBehaviour:
   player: {fileID: 0}
   maxSpeed: 2
   acceleration: 1
+  anim: {fileID: -1563819668365944506}
 --- !u!50 &-298834638234507294
 Rigidbody2D:
   serializedVersion: 4
@@ -147,3 +149,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &-1563819668365944506
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3062569649412918010}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 93c04e3ae1a1d5c4bb15c927e2c6ad10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

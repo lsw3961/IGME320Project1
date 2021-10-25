@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
             invTimer -= Time.deltaTime;
         else
         {
+            anim.SetBool("isHurt",false);
             invulnerable = false;
             invTimer = invTime;
         }
@@ -188,6 +189,7 @@ public class Player : MonoBehaviour
     {
         if (!invulnerable && !active)
         {
+            anim.SetBool("isHurt", true);
             invulnerable = true;
             health -= amount;
         }
