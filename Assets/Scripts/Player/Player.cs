@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // Kenneth Rossi
 // 10/6/2021
@@ -52,6 +53,8 @@ public class Player : MonoBehaviour
     public AudioClip dashSound;
 
     public int Health { get { return health; } }
+    public Image[] lives;
+    public Sprite emptyHeart;
 
     // Start is called before the first frame update
     void Start()
@@ -196,6 +199,11 @@ public class Player : MonoBehaviour
     //Player takes damage and becomes invincible when they are hit
     public void TakeDamage(int amount)
     {
+        if (health > 1)
+        {
+            lives[health - 1].GetComponent<Image>().sprite = emptyHeart;
+        }
+
         if (!invulnerable && !active)
         {
             anim.SetBool("isHurt", true);
