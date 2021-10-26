@@ -48,7 +48,7 @@ public class Bullet : MonoBehaviour
 
     public void SetDirection(Vector2 dir, float speed) 
     {
-        direction = dir;
+        direction = dir.normalized;
         projectileSpeed = speed;
         gameObject.SetActive(true);
 

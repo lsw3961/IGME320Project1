@@ -32,6 +32,7 @@ public class BossOne : MonoBehaviour
     [SerializeField] private float acceleration = 1;
     [SerializeField] private int maxHealth = 10;
     private int health = 10;
+    private Transform parent;
 
     //AI control variables
     private float stateTime;
@@ -43,6 +44,9 @@ public class BossOne : MonoBehaviour
 
     //Attack management
     private Vector2 aimDirection;
+    private Animator animController;
+    [SerializeField] private float lungeVelocity;
+    private Vector2 lungeDirection;
 
     //Vectors used in calculating movement
     private Vector2 position;
@@ -52,14 +56,16 @@ public class BossOne : MonoBehaviour
 
     //Properties
     public bool IsAlive
-    { get { return _isAlive; } }    
+    { get { return _isAlive; } }
 
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth; 
+        health = maxHealth;
         targetVelocity = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
         position = new Vector2(transform.position.x, transform.position.y);
+        parent = transform.parent;
+        animController = GetComponentInParent<Animator>();
     }
 
     // Update is called once per frame
@@ -81,18 +87,20 @@ public class BossOne : MonoBehaviour
 
         //Update the aim direction to be a unit vector directly towards the player
         aimDirection = new Vector2(player.gameObject.transform.position.x - position.x, player.gameObject.transform.position.y - position.y).normalized;
+
         //Update properties to reflect actual gamestate
         targetVelocity = player.gameObject.transform.position - transform.position;
         targetVelocity = targetVelocity.normalized * maxSpeed;
-        position.x = transform.position.x;
-        position.y = transform.position.y;
+        //parent.position
 
+        /*
         //If the boss has more than half health, it should not walk by default during attack (unless something like Lunge overrides it).
         // Otherwise, it walks.
         if (maxHealth / health >= 2 && !coolingDown)
             walking = true;
         else
             walking = true;
+        */
 
         //Freezes the boss if it is doing something besides walking around
         if (state != AttackMode.Wander)
@@ -102,6 +110,7 @@ public class BossOne : MonoBehaviour
         switch (state)
         {
             case AttackMode.Wander:
+                animController.enabled = false;
                 if (!coolingDown)
                 {
                     stateDuration = Mathf.Pow(Random.Range(1.0f, 1.5f), 2) + 2;
@@ -116,7 +125,8 @@ public class BossOne : MonoBehaviour
             case AttackMode.Slash:
                 if (!coolingDown)
                 {
-                    //START SLASH ANIMATION HERE
+                    animController.enabled = true;
+                    animController.Play("Slash");
                     coolingDown = true;
                 }
                 //TRANSITION into ShSpread, ShStraight, or ShPlus
@@ -126,14 +136,26 @@ public class BossOne : MonoBehaviour
             case AttackMode.Lunge:
                 if (!coolingDown)
                 {
-                    //START ANIMATION HERE
+
+                    animController.enabled = true;
+                    animController.Play("Lunge");
+                    lungeDirection = aimDirection;
                     coolingDown = true;
                 }
+                position += lungeVelocity * lungeDirection * Time.deltaTime;
                 //TRANSITION into ShSpread or ShPlus
-                if (cooldownTime > 1.2f)
+
+                //Try to read the length of the clip and use that as a duration
+                foreach (AnimationClip anim in animController.runtimeAnimatorController.animationClips)
+                {
+                    if (anim.name == "Lunge")
+                        stateDuration = anim.length;
+                }
+                if (cooldownTime > stateDuration)
                     ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootPlus });
                 break;
             case AttackMode.ShootSpread:
+                animController.enabled = false;
                 if (!coolingDown)
                 {
                     //START ANIMATION HERE
@@ -156,6 +178,7 @@ public class BossOne : MonoBehaviour
                     ChangeState(3, new List<AttackMode> { AttackMode.Wander, AttackMode.Slash });
                 break;
             case AttackMode.ShootStraight:
+                animController.enabled = false;
                 if (!coolingDown)
                 {
                     //START ANIMATION HERE
@@ -168,6 +191,7 @@ public class BossOne : MonoBehaviour
                     ChangeState(3, new List<AttackMode> { AttackMode.Wander, AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
                 break;
             case AttackMode.ShootPlus:
+                animController.enabled = false;
                 if (!coolingDown)
                 {
                     //START ANIMATION HERE
@@ -197,6 +221,13 @@ public class BossOne : MonoBehaviour
     /// <param name="targetState"></param>
     private void ChangeState(AttackMode targetState)
     {
+        //Save the distance between the boss and its container
+        Vector2 offset = transform.position - transform.parent.position;
+        //Move the container to the boss's position (while zeroing out the Z position)
+        //This also moves the boss the same amount, but the second line fixes that
+        transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
+        transform.position -= new Vector3(offset.x, offset.y, transform.position.z);
+
         state = targetState;
         stateTime = 0.0f;
         coolingDown = false;
@@ -221,7 +252,7 @@ public class BossOne : MonoBehaviour
     private void ChangeState(int firstBias, List<AttackMode> possibleStates)
     {
         List<AttackMode> biasedList = new List<AttackMode>();
-        for(int i = 0; i < possibleStates.Count; i++)
+        for (int i = 0; i < possibleStates.Count; i++)
         {
             //Adds the first entry as many times as the bias calls for
             if (i == 0)
