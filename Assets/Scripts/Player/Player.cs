@@ -199,13 +199,12 @@ public class Player : MonoBehaviour
     //Player takes damage and becomes invincible when they are hit
     public void TakeDamage(int amount)
     {
-        if (health > 1)
-        {
-            lives[health - 1].GetComponent<Image>().sprite = emptyHeart;
-        }
-
         if (!invulnerable && !active)
         {
+            if (health > 1)
+            {
+                lives[health - 1].GetComponent<Image>().sprite = emptyHeart;
+            }
             anim.SetBool("isHurt", true);
             invulnerable = true;
             health -= amount;
