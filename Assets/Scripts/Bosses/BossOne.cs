@@ -54,6 +54,10 @@ public class BossOne : MonoBehaviour
     private Vector2 push;
     private Vector2 targetVelocity;
 
+    //sound fields
+    private AudioSource audioSource;
+    public AudioClip shootSound;
+
     //Properties
     public bool IsAlive
     { get { return _isAlive; } }
@@ -66,6 +70,7 @@ public class BossOne : MonoBehaviour
         position = new Vector2(transform.position.x, transform.position.y);
         parent = transform.parent;
         animController = GetComponentInParent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -136,7 +141,6 @@ public class BossOne : MonoBehaviour
             case AttackMode.Lunge:
                 if (!coolingDown)
                 {
-
                     animController.enabled = true;
                     animController.Play("Lunge");
                     lungeDirection = aimDirection;
@@ -273,6 +277,7 @@ public class BossOne : MonoBehaviour
     private void Shoot(Vector2 direction)
     {
         GameObject shotBullet = GameObject.Instantiate(moonBullet);
+        PlaySound(shootSound);
         shotBullet.transform.position = position;
         if (shotBullet.GetComponent<AttackBullet>() != null)
             shotBullet.GetComponent<AttackBullet>().SetVelocity(direction, bulletSpeed);
@@ -315,5 +320,15 @@ public class BossOne : MonoBehaviour
         //Caps acceleration
         if (push.magnitude > acceleration)
             push /= (push.magnitude / acceleration);
+    }
+
+    //Play an audio clip (sound effects only)
+    public void PlaySound(AudioClip audioClip, float volume = 1.0f, float pitch = 1.0f)
+    {
+        audioSource.volume = volume;
+        audioSource.pitch = pitch;
+
+        if (audioClip != null)
+            audioSource.PlayOneShot(audioClip);
     }
 }

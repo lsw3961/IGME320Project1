@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Melee
   - Enviroment
+  - Boss
   layers:
   - Default
   - TransparentFX
