@@ -13,6 +13,8 @@ public class PlayerCombat : MonoBehaviour
     public float activeTimer;
     private bool active = false;
     [SerializeField] Animator anim;
+    public AudioClip meleeSound;
+    private Player player;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,7 @@ public class PlayerCombat : MonoBehaviour
         swordCollider.enabled = false;
         testHitbox = GetComponent<SpriteRenderer>();
         testHitbox.enabled = false;
+        player = GetComponentInParent<Player>();
     }
 
     void Update()
@@ -34,6 +37,7 @@ public class PlayerCombat : MonoBehaviour
                 testHitbox.enabled = true;
                 active = true;
                 activeTimer = activeTime;
+                player.PlaySound(meleeSound, 1.0f, .6f);
             }
         }
 

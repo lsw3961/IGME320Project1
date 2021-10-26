@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector2 dashMovement;
 
     //invulnerability fields
-    private int health = 3;
+    public int health = 10;
     public float invTime = 2.0f;        //time spent invincible
     [SerializeField] private float invTimer;             //invincibility timer
     private bool invulnerable = false;  //is player invincible
@@ -45,6 +45,11 @@ public class Player : MonoBehaviour
     [SerializeField] float shootingTime = .5f;
     private float shootingCounter = .5f;
 
+    //sound fields
+    private AudioSource audioSource;
+    public AudioClip shootSound;
+    public AudioClip hurtSound;
+    public AudioClip dashSound;
 
     public int Health { get { return health; } }
 
@@ -55,6 +60,7 @@ public class Player : MonoBehaviour
         invTimer = invTime;
         sprite = GetComponent<SpriteRenderer>();
         playerBody = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -84,6 +90,7 @@ public class Player : MonoBehaviour
             {
                 active = true;
                 activeTimer = activeTime;
+                PlaySound(dashSound, 1.0f, .85f);
             }
             dashMovementX = movement.x;
             dashMovementY = movement.y;
@@ -119,6 +126,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             isShooting = true;
+            PlaySound(shootSound);
             GameObject temp = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
             if (temp != null)
             {
@@ -137,6 +145,7 @@ public class Player : MonoBehaviour
             if (shootingCounter <= 0) 
             {
                 shootingCounter = shootingTime;
+                PlaySound(shootSound);
                 GameObject temp = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
                 if (temp != null)
                 {
@@ -161,7 +170,7 @@ public class Player : MonoBehaviour
         if (active)
         {
             playerBody.MovePosition(playerBody.position + dashMovement * dashSpeed * Time.fixedDeltaTime);
-            Debug.Log("In dash");
+            //Debug.Log("In dash");
             activeTimer -= Time.fixedDeltaTime;
             if (activeTimer <= 0.0f)
             {
@@ -173,7 +182,7 @@ public class Player : MonoBehaviour
         // If on cooldown, you may not dash
         if (onCoolDown)
         {
-            Debug.Log("Dash on cooldown");
+            //Debug.Log("Dash on cooldown");
             coolDownTimer -= Time.fixedDeltaTime;
             if (coolDownTimer <= 0.0f)
             {
@@ -192,6 +201,7 @@ public class Player : MonoBehaviour
             anim.SetBool("isHurt", true);
             invulnerable = true;
             health -= amount;
+            PlaySound(hurtSound, 1.0f, .9f);
         }
 
         if (health <= 0)
@@ -200,4 +210,13 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Play an audio clip (sound effects only)
+    public void PlaySound(AudioClip audioClip, float volume = 1.0f, float pitch = 1.0f)
+    {
+        audioSource.volume = volume;
+        audioSource.pitch = pitch;
+
+        if(audioClip != null)
+            audioSource.PlayOneShot(audioClip);
+    }
 }
