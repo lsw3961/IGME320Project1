@@ -12,34 +12,34 @@ public class Player : MonoBehaviour
 {
     public float moveSpeed = 5f;
     [SerializeField] Animator anim;
-    public float dashSpeed = 10f;
-    public Rigidbody2D playerBody;
+    private Rigidbody2D playerBody;
     [SerializeField] Transform bulletTarget;
 
-    [SerializeField] private float projectileSpeed = 5f;
-    [SerializeField] string projectileName;
-    [SerializeField] public Vector3 direction;
+    public float projectileSpeed = 5f;
+    public string projectileName;
+    private Vector3 direction;
     private float rotateAngle;
 
     
-    [SerializeField] private Vector2 movement;
+    private Vector2 movement;
     private float dashMovementX;
     private float dashMovementY;
-    [SerializeField] private Vector2 dashMovement;
+    private Vector2 dashMovement;
 
     //invulnerability fields
     public int health = 10;
-    public float invTime = 2.0f;        //time spent invincible
-    [SerializeField] private float invTimer;             //invincibility timer
+    public float invTime = 1.0f;        //time spent invincible
+    private float invTimer;             //invincibility timer
     private bool invulnerable = false;  //is player invincible
     private SpriteRenderer sprite;
 
     //dodge roll/dash fields
+    public float dashSpeed = 10f;
     public float coolDownTime = 1.5f;
-    public float coolDownTimer;
+    private float coolDownTimer;
     private bool onCoolDown = false;
     public float activeTime = 1.5f;
-    public float activeTimer;
+    private float activeTimer;
     private bool active = false;
     //shooting fields
     private bool isShooting = false;
@@ -52,7 +52,6 @@ public class Player : MonoBehaviour
     public AudioClip hurtSound;
     public AudioClip dashSound;
 
-    public int Health { get { return health; } }
     public Image[] lives;
     public Sprite emptyHeart;
 
@@ -64,6 +63,7 @@ public class Player : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         playerBody = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
+        anim.SetBool("isHurt", false);
     }
 
     // Update is called once per frame

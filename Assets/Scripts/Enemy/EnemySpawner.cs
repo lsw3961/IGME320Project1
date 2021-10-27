@@ -20,7 +20,14 @@ public class EnemySpawner : MonoBehaviour
         if (spawnCounter <= 0) 
         {
             spawnCounter = spawnTime;
-            Instantiate(enemy,this.gameObject.transform.position,Quaternion.identity);
+            GameObject temp = ObjectPooler.SharedInstance.GetPooledObject("Enemy");
+            if (temp != null)
+            {
+                temp.transform.position = transform.position;
+                //temp.transform.rotation = this.gameObject.transform.rotation;
+                temp.SetActive(true);
+            }
+            return;
         }
         spawnCounter -= Time.deltaTime;
     }

@@ -174,21 +174,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 990341467562501297, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 990341467562501301, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter
-      objectReference: {fileID: 0}
-    - target: {fileID: 990341467562501302, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-      propertyPath: anim
-      value: 
-      objectReference: {fileID: 1765896387}
-    - target: {fileID: 990341467562501303, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-      propertyPath: m_Constraints
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
@@ -369,11 +357,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 990341467562501301, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
   m_PrefabInstance: {fileID: 131508674}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1765896387 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 990341467562501297, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-  m_PrefabInstance: {fileID: 131508674}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1781567061
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -388,6 +371,10 @@ PrefabInstance:
     - target: {fileID: 2605206778898013274, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
       propertyPath: m_Name
       value: BossContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 2605206778898013274, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 6663039299052258161, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
       propertyPath: m_RootOrder
@@ -433,10 +420,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6816260118212382677, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 6816260118212382678, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1765896383}
+    - target: {fileID: 6816260118212382678, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
 --- !u!1001 &2136995275
