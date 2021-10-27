@@ -2981,6 +2981,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5910150137814362382, guid: d5394db1652231a4397e05894567963f, type: 3}
+      propertyPath: objectsToPool.Array.data[1].poolAmount
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5910150137814362383, guid: d5394db1652231a4397e05894567963f, type: 3}
       propertyPath: m_Name
       value: ObjectPooler
