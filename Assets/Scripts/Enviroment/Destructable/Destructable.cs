@@ -8,14 +8,14 @@ public class Destructable : MonoBehaviour
     [SerializeField] private string[] collisionNames;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        for (int i = 0;i<collisionNames.Length;i++) 
+        for (int i = 0; i < collisionNames.Length; i++)
         {
             if (collision.gameObject.tag == collisionNames[i])
             {
                 if (collision.gameObject.tag == "Projectile")
                     collision.gameObject.SetActive(false);
                 Health--;
-                if (Health <= 0) 
+                if (Health <= 0)
                 {
                     //play destrction animation
                     //Debug.Log("Hit");
@@ -27,5 +27,13 @@ public class Destructable : MonoBehaviour
             }
         }
 
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //If sword hits enemy
+        if (collision.gameObject.tag == "Melee")
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 }
