@@ -69,7 +69,7 @@ public class Bullet : MonoBehaviour
         {
             if (collision.gameObject.tag == hitNames[i]) 
             {
-                gameObject.SetActive(false);
+                this.gameObject.SetActive(false);
                 return;
             }
         }
