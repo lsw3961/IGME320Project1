@@ -3762,6 +3762,10 @@ PrefabInstance:
       value: PlayerCharacter
       objectReference: {fileID: 0}
     - target: {fileID: 990341467562501302, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: shootingTime
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341467562501302, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
       propertyPath: lives.Array.data[0]
       value: 
       objectReference: {fileID: 1495115423}
@@ -3840,7 +3844,7 @@ PrefabInstance:
     - target: {fileID: 990341468201614427, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
       propertyPath: anim
       value: 
-      objectReference: {fileID: 1254908340}
+      objectReference: {fileID: 0}
     - target: {fileID: 990341468201614427, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
       propertyPath: activeTime
       value: 0.5

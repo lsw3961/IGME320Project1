@@ -174,21 +174,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 990341467562501297, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 990341467562501301, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
       propertyPath: m_Name
       value: PlayerCharacter
-      objectReference: {fileID: 0}
-    - target: {fileID: 990341467562501302, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-      propertyPath: anim
-      value: 
-      objectReference: {fileID: 1765896387}
-    - target: {fileID: 990341467562501303, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-      propertyPath: m_Constraints
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
@@ -367,11 +355,6 @@ PrefabInstance:
 --- !u!1 &1765896383 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 990341467562501301, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
-  m_PrefabInstance: {fileID: 131508674}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1765896387 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 990341467562501297, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
   m_PrefabInstance: {fileID: 131508674}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1781567061

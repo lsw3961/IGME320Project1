@@ -30,7 +30,7 @@ public class BossOne : MonoBehaviour
     private bool _isAlive = true;
     [SerializeField] private float maxSpeed = 1;
     [SerializeField] private float acceleration = 1;
-    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private int maxHealth = 150;
     private int health = 150;
     private Transform parent;
 

@@ -576,7 +576,7 @@ MonoBehaviour:
   dashSpeed: 14
   coolDownTime: 1.5
   activeTime: 0.5
-  shootingTime: 0.5
+  shootingTime: 0.15
   shootSound: {fileID: 8300000, guid: ced98c94719f73b4f8a39b5364aeb9f0, type: 3}
   hurtSound: {fileID: 8300000, guid: 9a39dbe594e401245866f66cb789a583, type: 3}
   dashSound: {fileID: 8300000, guid: 20d828a47fa852e449b473526a79d3b6, type: 3}
