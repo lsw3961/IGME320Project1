@@ -568,25 +568,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   anim: {fileID: 990341467562501297}
-  dashSpeed: 14
-  playerBody: {fileID: 990341467562501303}
   bulletTarget: {fileID: 990341466678614552}
   projectileSpeed: 50
   projectileName: Projectile
-  direction: {x: 0, y: 1, z: 0}
-  movement: {x: 0, y: 0}
-  dashMovement: {x: 0, y: 0}
   health: 10
   invTime: 1
-  invTimer: 0
-  coolDownTime: 0.75
-  coolDownTimer: 0
-  activeTime: 0.3
-  activeTimer: 0
+  dashSpeed: 14
+  coolDownTime: 1.5
+  activeTime: 0.5
   shootingTime: 0.5
   shootSound: {fileID: 8300000, guid: ced98c94719f73b4f8a39b5364aeb9f0, type: 3}
   hurtSound: {fileID: 8300000, guid: 9a39dbe594e401245866f66cb789a583, type: 3}
   dashSound: {fileID: 8300000, guid: 20d828a47fa852e449b473526a79d3b6, type: 3}
+  lives:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  emptyHeart: {fileID: 21300000, guid: 7502f720ec7dabe488edcabc4f75fd27, type: 3}
 --- !u!50 &990341467562501303
 Rigidbody2D:
   serializedVersion: 4
@@ -607,7 +612,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &990341467562501300
 BoxCollider2D:
   m_ObjectHideFlags: 0
