@@ -3801,6 +3801,66 @@ PrefabInstance:
       propertyPath: lives.Array.data[9]
       value: 
       objectReference: {fileID: 232634736}
+    - target: {fileID: 990341468136414486, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468136414486, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468136414486, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614424, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_Size.y
+      value: 0.67510045
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614424, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.19617754
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614424, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614425, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614425, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614425, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614427, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1254908340}
+    - target: {fileID: 990341468201614427, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: activeTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614427, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: coolDownTime
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 990341468201614430, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_TagString
+      value: Melee
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615526217292868372, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2615526217292868372, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.44
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5915fadfcf40bc349b54e95ded024560, type: 3}
 --- !u!1001 &1154853843972573700

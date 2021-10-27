@@ -70,8 +70,14 @@ public class Enemy : MonoBehaviour
             //shouldSeek = false;
             player.GetComponent<Player>().TakeDamage(damage);
         }
+
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
         //If sword hits enemy
-        if (other.gameObject.tag == "Melee")
+        if (collision.gameObject.tag == "Melee")
         {
             TakeDamage(3);
         }
