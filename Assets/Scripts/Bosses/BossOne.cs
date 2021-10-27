@@ -30,8 +30,8 @@ public class BossOne : MonoBehaviour
     private bool _isAlive = true;
     [SerializeField] private float maxSpeed = 1;
     [SerializeField] private float acceleration = 1;
-    [SerializeField] private int maxHealth = 10;
-    private int health = 10;
+    [SerializeField] private int maxHealth = 100;
+    private int health = 150;
     private Transform parent;
 
     //AI control variables
@@ -93,13 +93,6 @@ public class BossOne : MonoBehaviour
         //If an animation is cooling down, add time so it knows when to transition
         if (coolingDown)
             cooldownTime += Time.deltaTime;
-
-        //Mark dead if dead
-        if (health <= 0)
-            _isAlive = false;
-        //Skip if dead
-        if (!_isAlive)
-            return;
 
         //Update the aim direction to be a unit vector directly towards the player
         aimDirection = new Vector2(player.gameObject.transform.position.x - position.x, player.gameObject.transform.position.y - position.y).normalized;
@@ -242,6 +235,25 @@ public class BossOne : MonoBehaviour
         //Set actual position to calculated position
         transform.position = new Vector3(position.x, position.y, 0);
     }
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        //If bullet hits boss, boss takes damage
+        if (other.gameObject.tag == "Projectile")
+        {
+            TakeDamage(1);
+        }
+        //If player touches boss, player takes damage
+        if (other.gameObject.tag == "Player")
+        {
+            player.GetComponent<Player>().TakeDamage(1);
+        }
+        //If sword hits boss
+        if (other.gameObject.tag == "Melee")
+        {
+            TakeDamage(3);
+        }
+    }
+    
 
     /// <summary>
     /// Switches the boss state to the selected state
@@ -315,6 +327,22 @@ public class BossOne : MonoBehaviour
     private void Shoot(Vector3 direction)
     {
         Shoot(new Vector2(direction.x, direction.y));
+    }
+
+    /// <summary>
+    /// Causes the boss to lose one point of health
+    /// </summary>
+    /// <returns>Returns true if the boss survives the hit</returns>
+    public bool TakeDamage(int damage)
+    {
+        health--;
+        Debug.Log(health);
+        if (health > 0)
+            return true;
+
+        //Kill if dead
+        this.gameObject.SetActive(false);
+        return false;
     }
 
     /// <summary>

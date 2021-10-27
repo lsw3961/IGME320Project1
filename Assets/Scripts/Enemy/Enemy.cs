@@ -73,7 +73,6 @@ public class Enemy : MonoBehaviour
         //If sword hits enemy
         if (other.gameObject.tag == "Melee")
         {
-            Debug.Log("Bruh");
             TakeDamage(3);
         }
     }

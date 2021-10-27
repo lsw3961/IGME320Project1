@@ -389,6 +389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 2605206778898013274, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6663039299052258161, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -433,10 +437,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6816260118212382677, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 6816260118212382678, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1765896383}
+    - target: {fileID: 6816260118212382678, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c91d0b5ccd1218142a3f2498e3cacec1, type: 3}
 --- !u!1001 &2136995275
