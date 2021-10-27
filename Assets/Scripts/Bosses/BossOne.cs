@@ -47,6 +47,7 @@ public class BossOne : MonoBehaviour
     private Animator animController;
     [SerializeField] private float lungeVelocity;
     private Vector2 lungeDirection;
+    private GameObject slashContainer;
 
     //Vectors used in calculating movement
     private Vector2 position;
@@ -71,6 +72,16 @@ public class BossOne : MonoBehaviour
         parent = transform.parent;
         animController = GetComponentInParent<Animator>();
         audioSource = GetComponent<AudioSource>();
+
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            slashContainer = transform.GetChild(i).gameObject;
+            if (slashContainer != null && slashContainer.name == "SlashContainer")
+            {
+                slashContainer.transform.rotation = Quaternion.Euler(aimDirection);
+                break;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -125,18 +136,31 @@ public class BossOne : MonoBehaviour
                 Move();
                 //TRANSITION into Slash, Lunge, or ShStraight (uses a different detection due to flexible state duration
                 if (stateTime > stateDuration)
-                    ChangeState(new List<AttackMode> { AttackMode.Slash, AttackMode.Lunge, AttackMode.ShootStraight });
+                    ChangeState(5, new List<AttackMode> { AttackMode.Slash, AttackMode.Lunge, AttackMode.ShootStraight });
                 break;
             case AttackMode.Slash:
                 if (!coolingDown)
                 {
+                    //If the slash container exists (which it should), activate it
+                    if (slashContainer != null)
+                        slashContainer.transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Rad2Deg * (Mathf.Atan2(aimDirection.y, aimDirection.x) + 90));
                     animController.enabled = true;
                     animController.Play("Slash");
                     coolingDown = true;
                 }
                 //TRANSITION into ShSpread, ShStraight, or ShPlus
-                if (cooldownTime > 2.5f)
+
+                //Try to read the length of the clip and use that as a duration
+                foreach (AnimationClip anim in animController.runtimeAnimatorController.animationClips)
+                {
+                    if (anim.name == "Slash")
+                        stateDuration = anim.length;
+                }
+                if (cooldownTime > stateDuration)
+                {
+                    animController.enabled = false;
                     ChangeState(new List<AttackMode> { AttackMode.ShootSpread, AttackMode.ShootStraight, AttackMode.ShootPlus });
+                }
                 break;
             case AttackMode.Lunge:
                 if (!coolingDown)
