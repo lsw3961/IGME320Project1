@@ -357,8 +357,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990341466678614553}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.040833056, y: -0.2739588, z: 0}
-  m_LocalScale: {x: 1, y: -0.9690428, z: 1}
+  m_LocalPosition: {x: 0.074, y: -0.561, z: 0}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children:
   - {fileID: 2615526217292868372}
   m_Father: {fileID: 990341468136414487}
@@ -570,7 +570,7 @@ MonoBehaviour:
   anim: {fileID: 990341467562501297}
   dashSpeed: 14
   playerBody: {fileID: 990341467562501303}
-  bulletTarget: {fileID: 990341466678614552}
+  bulletTarget: {fileID: 2615526217292868372}
   projectileSpeed: 50
   projectileName: Projectile
   direction: {x: 0, y: 1, z: 0}
@@ -581,12 +581,24 @@ MonoBehaviour:
   invTimer: 0
   coolDownTime: 0.75
   coolDownTimer: 0
-  activeTime: 0.3
+  activeTime: 0.5
   activeTimer: 0
-  shootingTime: 0.5
+  shootingTime: 0.15
   shootSound: {fileID: 8300000, guid: ced98c94719f73b4f8a39b5364aeb9f0, type: 3}
   hurtSound: {fileID: 8300000, guid: 9a39dbe594e401245866f66cb789a583, type: 3}
   dashSound: {fileID: 8300000, guid: 20d828a47fa852e449b473526a79d3b6, type: 3}
+  lives:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  emptyHeart: {fileID: 21300000, guid: 7502f720ec7dabe488edcabc4f75fd27, type: 3}
 --- !u!50 &990341467562501303
 Rigidbody2D:
   serializedVersion: 4
@@ -607,7 +619,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &990341467562501300
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -825,9 +837,10 @@ GameObject:
   - component: {fileID: 990341468201614426}
   - component: {fileID: 990341468201614427}
   - component: {fileID: 990341468201614424}
+  - component: {fileID: 1691646304}
   m_Layer: 0
   m_Name: meleeWeapon
-  m_TagString: Untagged
+  m_TagString: Melee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -911,9 +924,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordCollider: {fileID: 990341468201614424}
   testHitbox: {fileID: 990341468201614426}
-  coolDownTime: 0.5
+  coolDownTime: 0.25
   coolDownTimer: 0
-  activeTime: 1.5
+  activeTime: 0.5
   activeTimer: 0
   anim: {fileID: 990341467562501297}
   meleeSound: {fileID: 8300000, guid: bbc875b89d82b9b419e0e85fc8c19dcb, type: 3}
@@ -930,7 +943,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0027567744, y: 0.1957306}
+  m_Offset: {x: -0.0027567744, y: 0.19617754}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -941,8 +954,29 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5308547, y: 0.67420644}
+  m_Size: {x: 0.5308547, y: 0.67510045}
   m_EdgeRadius: 0
+--- !u!50 &1691646304
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990341468201614430}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &5219333023974879387
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,7 +1001,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5219333023974879387}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.13, y: 0.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 990341466678614552}
