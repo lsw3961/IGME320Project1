@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5910150137814362381}
   - component: {fileID: 5910150137814362382}
   m_Layer: 0
-  m_Name: ProjectileManager
+  m_Name: ObjectPooler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,4 +47,8 @@ MonoBehaviour:
   - poolAmount: 20
     objectToPool: {fileID: 1243556674371591586, guid: a7f5cc7259ce30942a100abf88a18261, type: 3}
     expandable: 1
-    parentObject: {fileID: 0}
+    objectContainer: {fileID: 0}
+  - poolAmount: 100
+    objectToPool: {fileID: 3062569649412918010, guid: f3456f9a7347bd949a6363a341f1b79b, type: 3}
+    expandable: 0
+    objectContainer: {fileID: 0}
