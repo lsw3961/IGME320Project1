@@ -14,6 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] Animator anim;
     private Rigidbody2D playerBody;
     [SerializeField] Transform bulletTarget;
+    [SerializeField] Transform bulletTarget2;
+    [SerializeField] Transform bulletTarget3;
+
 
     public float projectileSpeed = 5f;
     public string projectileName;
@@ -55,9 +58,13 @@ public class Player : MonoBehaviour
     public Image[] lives;
     public Sprite emptyHeart;
 
+    // Multihit shot
+    private bool multiShot;
+
     // Start is called before the first frame update
     void Start()
     {
+        multiShot = false;
         shootingCounter = shootingTime;
         invTimer = invTime;
         sprite = GetComponent<SpriteRenderer>();
@@ -137,6 +144,24 @@ public class Player : MonoBehaviour
                 //temp.transform.rotation = this.gameObject.transform.rotation;
                 temp.GetComponent<Bullet>().SetDirection(direction, projectileSpeed);
             }
+            if (multiShot)
+            {
+                multiShot = false;
+                GameObject temp2 = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
+                if (temp2 != null)
+                {
+                    temp2.transform.position = bulletTarget2.position;
+                    //temp.transform.rotation = this.gameObject.transform.rotation;
+                    temp2.GetComponent<Bullet>().SetDirection(direction, projectileSpeed);
+                }
+                GameObject temp3 = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
+                if (temp3 != null)
+                {
+                    temp3.transform.position = bulletTarget3.position;
+                    //temp.transform.rotation = this.gameObject.transform.rotation;
+                    temp3.GetComponent<Bullet>().SetDirection(direction, projectileSpeed);
+                }
+            }
             return;
         }
         if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -155,6 +180,24 @@ public class Player : MonoBehaviour
                     temp.transform.position = bulletTarget.position;
                     //temp.transform.rotation = this.gameObject.transform.rotation;
                     temp.GetComponent<Bullet>().SetDirection(direction, projectileSpeed);
+                }
+                if (multiShot)
+                {
+                    multiShot = false;
+                    GameObject temp2 = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
+                    if (temp2 != null)
+                    {
+                        temp2.transform.position = bulletTarget2.position;
+                        //temp.transform.rotation = this.gameObject.transform.rotation;
+                        temp2.GetComponent<Bullet>().SetDirection(direction, projectileSpeed);
+                    }
+                    GameObject temp3 = ObjectPooler.SharedInstance.GetPooledObject(projectileName);
+                    if (temp3 != null)
+                    {
+                        temp3.transform.position = bulletTarget3.position;
+                        //temp.transform.rotation = this.gameObject.transform.rotation;
+                        temp3.GetComponent<Bullet>().SetDirection(direction, projectileSpeed);
+                    }
                 }
             }
             shootingCounter -= Time.deltaTime;
@@ -177,6 +220,7 @@ public class Player : MonoBehaviour
             activeTimer -= Time.fixedDeltaTime;
             if (activeTimer <= 0.0f)
             {
+                multiShot = true;
                 active = false;
                 onCoolDown = true;
                 coolDownTimer = coolDownTime;
