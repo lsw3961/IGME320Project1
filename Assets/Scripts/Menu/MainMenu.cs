@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         SceneManager.LoadScene("Level 1");
+        HealthManager.instance.health = 10;
     }
 
     public void Narrative()

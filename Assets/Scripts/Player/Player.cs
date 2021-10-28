@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     private Vector2 dashMovement;
 
     //invulnerability fields
-    public int health = 10;
+    // public int health = 10;
     public float invTime = 1.0f;        //time spent invincible
     private float invTimer;             //invincibility timer
     private bool invulnerable = false;  //is player invincible
@@ -71,6 +71,11 @@ public class Player : MonoBehaviour
         playerBody = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
         anim.SetBool("isHurt", false);
+
+        for (int i = HealthManager.instance.health; i < 10; i++)
+        {
+            lives[i].GetComponent<Image>().sprite = emptyHeart;
+        }
     }
 
     // Update is called once per frame
@@ -245,17 +250,17 @@ public class Player : MonoBehaviour
     {
         if (!invulnerable && !active)
         {
-            if (health > 1)
+            if (HealthManager.instance.health > 1)
             {
-                lives[health - 1].GetComponent<Image>().sprite = emptyHeart;
+                lives[HealthManager.instance.health - 1].GetComponent<Image>().sprite = emptyHeart;
             }
             anim.SetBool("isHurt", true);
             invulnerable = true;
-            health -= amount;
+            HealthManager.instance.health -= amount;
             PlaySound(hurtSound, 1.0f, .9f);
         }
 
-        if (health <= 0)
+        if (HealthManager.instance.health <= 0)
         {
             SceneManager.LoadScene("Game Over");
         }
