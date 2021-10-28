@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 //Author: Michael Chan
 
 enum AttackMode
@@ -59,6 +59,9 @@ public class BossOne : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip shootSound;
 
+    //UI fields
+    [SerializeField] private Slider BossHealthBar;
+
     //Properties
     public bool IsAlive
     { get { return _isAlive; } }
@@ -67,6 +70,8 @@ public class BossOne : MonoBehaviour
     void Start()
     {
         health = maxHealth;
+        BossHealthBar.maxValue = maxHealth;
+        BossHealthBar.value = maxHealth;
         targetVelocity = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
         position = new Vector2(transform.position.x, transform.position.y);
         parent = transform.parent;
@@ -87,6 +92,8 @@ public class BossOne : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //update health bar
+        UpdateHealthUI();
         //Tracks the time a state has been active
         stateTime += Time.deltaTime;
 
@@ -340,11 +347,16 @@ public class BossOne : MonoBehaviour
         if (health > 0)
             return true;
 
+        UpdateHealthUI();
         //Kill if dead
         this.gameObject.SetActive(false);
         return false;
     }
-
+    ///Method for updating boss health UI
+    private void UpdateHealthUI() 
+    {
+        BossHealthBar.value = health;
+    }
     /// <summary>
     /// Moves the position of the boss on the screen based on current velocity and acceleration
     /// </summary>
