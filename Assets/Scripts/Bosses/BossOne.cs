@@ -260,7 +260,16 @@ public class BossOne : MonoBehaviour
             TakeDamage(3);
         }
     }
-    
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //If sword hits boss
+        if (collision.gameObject.tag == "Melee")
+        {
+            TakeDamage(3);
+        }
+    }
+
 
     /// <summary>
     /// Switches the boss state to the selected state
@@ -342,7 +351,7 @@ public class BossOne : MonoBehaviour
     /// <returns>Returns true if the boss survives the hit</returns>
     public bool TakeDamage(int damage)
     {
-        health--;
+        health = health - damage;
         Debug.Log(health);
         if (health > 0)
             return true;
