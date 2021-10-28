@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
     private int damage = 1;
 
     //Vectors used in calculating movement
+    private Vector3 direction;
+    private float rotateAngle;
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 push;
@@ -51,6 +53,14 @@ public class Enemy : MonoBehaviour
 
         //Set actual position to calculated position
         transform.position = new Vector3(position.x, position.y, 0);
+
+
+        // Rotate enemy to player
+        direction = player.gameObject.transform.position - transform.position;
+        direction.Normalize();
+        rotateAngle = (Mathf.Atan2(direction.y, direction.x) + Mathf.PI / 2) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, rotateAngle);
+        // transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
     }
 
     //Unity Collision Detection 
