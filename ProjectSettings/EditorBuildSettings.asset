@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Level 3.unity
     guid: dea60ff28fad16e4a8ec2556445f5b67
   - enabled: 1
+    path: Assets/Scenes/Testing/Boss_Demo.unity
+    guid: 8301bded84cf65a409986db8314d9821
+  - enabled: 1
     path: Assets/Scenes/Game Over.unity
     guid: c08d0ada0e48f7c458c943b35eefe153
   m_configObjects: {}
