@@ -61,6 +61,10 @@ public class Player : MonoBehaviour
     // Multihit shot
     private bool multiShot;
 
+    //Getter for invulnerability status
+    public bool IsInvulnerable
+    { get { return invulnerable; } }
+
     // Start is called before the first frame update
     void Start()
     {

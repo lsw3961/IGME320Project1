@@ -40,7 +40,6 @@ public class BossOne : MonoBehaviour
     private bool coolingDown;
     private float cooldownTime;
     private AttackMode state;
-    private bool walking = true;
 
     //Attack management
     private Vector2 aimDirection;
@@ -107,16 +106,6 @@ public class BossOne : MonoBehaviour
         //Update properties to reflect actual gamestate
         targetVelocity = player.gameObject.transform.position - transform.position;
         targetVelocity = targetVelocity.normalized * maxSpeed;
-        //parent.position
-
-        /*
-        //If the boss has more than half health, it should not walk by default during attack (unless something like Lunge overrides it).
-        // Otherwise, it walks.
-        if (maxHealth / health >= 2 && !coolingDown)
-            walking = true;
-        else
-            walking = true;
-        */
 
         //Freezes the boss if it is doing something besides walking around
         if (state != AttackMode.Wander)

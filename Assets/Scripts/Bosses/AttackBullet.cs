@@ -34,6 +34,21 @@ public class AttackBullet : BossAttack
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        //If the bullet hits the player, damage the player and delete the bullet
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("Bullet touched player");
+            //If the player is not invulnerable, damage them
+            if (!other.gameObject.GetComponent<Player>().IsInvulnerable)
+            {
+                other.gameObject.GetComponent<Player>().TakeDamage(1);
+                Destroy(this.gameObject);
+            }
+        }
+    }
+
     public void SetVelocity(Vector2 direction, float speed)
     {
         travel = direction.normalized * speed;
