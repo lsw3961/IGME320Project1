@@ -238,6 +238,7 @@ public class BossOne : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
+        Debug.Log("Boss Touched Something");
         //If bullet hits boss, boss takes damage
         if (other.gameObject.tag == "Projectile")
         {
