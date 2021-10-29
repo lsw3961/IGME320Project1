@@ -42,8 +42,8 @@ public class LevelGeneration : MonoBehaviour
         else if (stopGeneration && !exitIsMade)
         {
             exitIsMade = true;
-            float randomX = Random.Range(-3, 6);
-            float randomY = Random.Range(-3, 6);
+            float randomX = Random.Range(0, 3);
+            float randomY = Random.Range(0, 3);
             Instantiate(endLevel, new Vector3(transform.position.x + randomX, transform.position.y + randomY,0.0f), Quaternion.identity);
         }
     }
