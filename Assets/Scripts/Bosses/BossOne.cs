@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 //Author: Michael Chan
 
 enum AttackMode
@@ -345,11 +346,14 @@ public class BossOne : MonoBehaviour
         health = health - damage;
         Debug.Log(health);
         if (health > 0)
+        {
             return true;
+        }
 
-        UpdateHealthUI();
+        // UpdateHealthUI();
         //Kill if dead
         this.gameObject.SetActive(false);
+        SceneManager.LoadScene("Victory");
         return false;
     }
     ///Method for updating boss health UI
