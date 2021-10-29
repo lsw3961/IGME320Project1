@@ -22,8 +22,8 @@ public class AttackBullet : BossAttack
         //Move the projectile
         gameObject.transform.position += new Vector3(travel.x, travel.y, 0.0f) * Time.deltaTime;
 
-        //Spin the projectile around
-        transform.rotation = transform.rotation * Quaternion.AngleAxis(1.0f, Vector3.forward);
+        //Spin the projectile around 3 revolutions per second
+        transform.rotation = transform.rotation * Quaternion.AngleAxis(1080.0f * Time.deltaTime, Vector3.forward);
 
         timeAlive += Time.deltaTime;
         //Destroy bullet if it has been on screen for long enough
