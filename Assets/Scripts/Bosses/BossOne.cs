@@ -68,12 +68,12 @@ public class BossOne : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        parent = transform.parent;
         health = maxHealth;
         BossHealthBar.maxValue = maxHealth;
         BossHealthBar.value = maxHealth;
-        targetVelocity = new Vector2(player.gameObject.transform.position.x, player.gameObject.transform.position.y);
-        position = new Vector2(transform.position.x, transform.position.y);
-        parent = transform.parent;
+        targetVelocity = new Vector2(player.gameObject.transform.position.x - parent.position.x, player.gameObject.transform.position.y - parent.position.x);
+        position = new Vector2(parent.position.x, parent.position.y);
         animController = GetComponentInParent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
@@ -86,11 +86,15 @@ public class BossOne : MonoBehaviour
                 break;
             }
         }
+
+        //Prevents boss from pushing player, but also breaks contact damage
+        Physics2D.IgnoreCollision(this.GetComponent<Collider2D>(), player.GetComponent<Collider2D>());
     }
 
     // Update is called once per frame
     void Update()
     {
+        parent = transform.parent;
         //update health bar
         UpdateHealthUI();
         //Tracks the time a state has been active
@@ -100,12 +104,13 @@ public class BossOne : MonoBehaviour
         if (coolingDown)
             cooldownTime += Time.deltaTime;
 
+        position = new Vector2(parent.position.x, parent.position.y);
+
         //Update the aim direction to be a unit vector directly towards the player
         aimDirection = new Vector2(player.gameObject.transform.position.x - position.x, player.gameObject.transform.position.y - position.y).normalized;
-
-        //Update properties to reflect actual gamestate
-        targetVelocity = player.gameObject.transform.position - transform.position;
-        targetVelocity = targetVelocity.normalized * maxSpeed;
+        Debug.Log(Mathf.Rad2Deg * Mathf.Atan2(aimDirection.y, aimDirection.x) + 90);
+        //Make the boss face the player
+        transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Rad2Deg * (Mathf.Atan2(aimDirection.y, aimDirection.x)) + 90);
 
         //Freezes the boss if it is doing something besides walking around
         if (state != AttackMode.Wander)
@@ -229,7 +234,7 @@ public class BossOne : MonoBehaviour
         }
 
         //Set actual position to calculated position
-        transform.position = new Vector3(position.x, position.y, 0);
+        parent.position = new Vector3(position.x, position.y, 0);
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -242,11 +247,6 @@ public class BossOne : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             player.GetComponent<Player>().TakeDamage(1);
-        }
-        //If sword hits boss
-        if (other.gameObject.tag == "Melee")
-        {
-            TakeDamage(3);
         }
     }
 
@@ -266,13 +266,14 @@ public class BossOne : MonoBehaviour
     /// <param name="targetState"></param>
     private void ChangeState(AttackMode targetState)
     {
+        /*
         //Save the distance between the boss and its container
         Vector2 offset = transform.position - transform.parent.position;
         //Move the container to the boss's position (while zeroing out the Z position)
         //This also moves the boss the same amount, but the second line fixes that
         transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
         transform.position -= new Vector3(offset.x, offset.y, transform.position.z);
-
+        */
         state = targetState;
         stateTime = 0.0f;
         coolingDown = false;
@@ -376,6 +377,10 @@ public class BossOne : MonoBehaviour
     /// </summary>
     private void Chase()
     {
+        //Determine the desired velocity for the boss to move towards the player
+        targetVelocity = player.gameObject.transform.position - parent.position;
+        targetVelocity = targetVelocity.normalized * maxSpeed;
+
         //Accelerates the enemy to alter its course directly towards the player
         push = targetVelocity - velocity;
 
